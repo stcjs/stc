@@ -47,3 +47,5 @@ stc.workflow({
 stc.preset(qiwutuan, {
   compressJS: {on: false, options: ''}
 }); 
+
+stc.start();

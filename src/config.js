@@ -1,3 +1,4 @@
+import {extend} from 'stc-helper';
 /**
  * config class
  */
@@ -10,6 +11,10 @@ export default class {
      * default config
      */
     this._config = {
+      common: {
+        exclude: [/Thumbs\.db$/i, /\.svn|\.git/, /\.DStore/i],
+        outputPath: 'output'
+      },
       template: {
         engine: '',
         adapter: '',
@@ -46,11 +51,11 @@ export default class {
   set(name, value){
    if(typeof name === 'object'){
      for(let key in name){
-       this._config[key] = name[key];
+       this._config[key] = extend(this._config[key], name[key]);
      }
      return this;
    }
-   this._config[name] = value;
+   this._config[name] = extend(this._config[name], value);
    return this; 
   }
 }

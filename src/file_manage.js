@@ -1,4 +1,4 @@
-import {getFiles, isArray, isRegExp} from 'stc-helper';
+import {getFiles, isArray, isRegExp, isObject} from 'stc-helper';
 import stcFile from 'stc-file';
 /**
  * file manage
@@ -10,6 +10,7 @@ export default class {
   constructor(config = {}){
     this.config = config;
     this.files = this._getContainFiles();
+    //@TODO add log files
   }
   /**
    * get init contain files
@@ -17,6 +18,7 @@ export default class {
   _getContainFiles(){
     let list = ['template', 'static'];
     let totalFiles = [];
+    let commonExclude = this.config.common.exclude;
     list.forEach(type => {
       let files = [];
       let {include, exclude} = this.config[type];
@@ -31,7 +33,7 @@ export default class {
         files = files.concat(tFiles);
       });
       files = files.filter(item => {
-        return !this.match(item, exclude);
+        return !this.match(item, exclude) && !this.match(item, commonExclude);
       }).map(item => {
         let instance = new stcFile({
           path: item
@@ -55,8 +57,15 @@ export default class {
     }
     let filePath = file.path || file;
     return pattern.some(item => {
+      // /\w/
       if(isRegExp(item)){
         return item.test(filePath);
+      }
+      // {type: 'template'}
+      if(isObject(item)){
+        return Object.keys(item).every(it => {
+          return file[it] === item[it];
+        });
       }
       //@TODO support glob pattern?
       return item === filePath;
@@ -70,6 +79,6 @@ export default class {
       if(this.match(item, include) && !this.match(item, exclude)){
         return true;
       }
-    })
+    });
   }
 }

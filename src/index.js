@@ -22,7 +22,10 @@ const STC = class {
   /**
    * get or set config
    */
-  config(options = {}){
+  config(options){
+    if(!options){
+      return this._config.get();
+    }
     this._config.set(options);
     return this;
   }
@@ -63,13 +66,14 @@ const STC = class {
    * set preset config
    */
   preset(preset, options = {}){
-    
+    preset = extend(preset, options);
+    return this.config(preset);
   }
   /**
    * start workflow
    */
   start(){
-    const instance = new Task(this);
+    const instance = new Task(this.config());
     instance.run();
   }
 };
