@@ -1,0 +1,51 @@
+{
+  "name": "stc",
+  "description": "stc",
+  "version": "1.0.0",
+  "author": {
+    "name": "welefen",
+    "email": "welefen@gmail.com"
+  },
+  "scripts": {
+    "test": "ava test/",
+    "test-cov": "istanbul cover ./node_modules/mocha/bin/_mocha -- -t 50000 --recursive  -R spec test/",
+    "compile": "babel --presets es2015-loose,stage-1 --plugins transform-runtime src/ --out-dir lib/ --source-maps",
+    "watch-compile": "npm run compile -- --watch",
+    "watch": "npm run watch-compile",
+    "prepublish": "npm run compile",
+    "eslint": "eslint src/"
+  },
+  "contributors": [{
+    "name": "welefen",
+    "email": "welefen@gmail.com"
+  }],
+  "main": "lib/index.js",
+  "dependencies": {
+    "stc-helper": "stcjs/stc-helper",
+    "stc-file": "stcjs/stc-file"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0",
+    "babel-cli": "6.7.7",
+    "babel-core": "6.x.x",
+    "babel-eslint": "6.x.x",
+    "babel-plugin-transform-runtime": "6.x.x",
+    "babel-preset-es2015": "6.x.x",
+    "babel-preset-es2015-loose": "7.0.0",
+    "babel-preset-stage-1": "6.x.x",
+    "eslint": "2.8.0",
+    "istanbul": "0.4.0"
+  },
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stcjs/stc"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/stcjs/stc/issues"
+  }
+}
