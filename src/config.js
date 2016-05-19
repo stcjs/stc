@@ -1,4 +1,5 @@
 import {extend} from 'stc-helper';
+import stcDep from 'stc-dep';
 /**
  * config class
  */
@@ -33,7 +34,10 @@ export default class {
       static: {
         include: [],
         exclude: []
-      }
+      },
+      dependence: [
+        {plugin: stcDep, include: [{type: 'template'}]}
+      ]
     };
   }
   /**

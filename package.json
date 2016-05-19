@@ -15,14 +15,17 @@
     "prepublish": "npm run compile",
     "eslint": "eslint src/"
   },
-  "contributors": [{
-    "name": "welefen",
-    "email": "welefen@gmail.com"
-  }],
+  "contributors": [
+    {
+      "name": "welefen",
+      "email": "welefen@gmail.com"
+    }
+  ],
   "main": "lib/index.js",
   "dependencies": {
-    "stc-helper": "stcjs/stc-helper",
-    "stc-file": "stcjs/stc-file"
+    "debug": "^2.2.0",
+    "stc-file": "stcjs/stc-file",
+    "stc-helper": "stcjs/stc-helper"
   },
   "devDependencies": {
     "ava": "^0.14.0",

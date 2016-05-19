@@ -1,5 +1,9 @@
 import {getFiles, isArray, isRegExp, isObject} from 'stc-helper';
 import stcFile from 'stc-file';
+import debug from 'debug';
+
+const debugFile = debug('file');
+
 /**
  * file manage
  */
@@ -9,8 +13,9 @@ export default class {
    */
   constructor(config = {}){
     this.config = config;
+    debugFile('=== app match files ===');
     this.files = this._getContainFiles();
-    //@TODO add log files
+    this.files.forEach(item => debugFile(item.path));
   }
   /**
    * get init contain files
@@ -75,10 +80,11 @@ export default class {
    * get files
    */
   getFiles(include = [], exclude = []){
-    return this.files.filter(item => {
+    let files = this.files.filter(item => {
       if(this.match(item, include) && !this.match(item, exclude)){
         return true;
       }
     });
+    return files;
   }
 }
