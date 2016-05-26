@@ -8,8 +8,9 @@ export default class {
   /**
    * constructor
    */
-  constructor(config = {}){
+  constructor(config = {}, astHandle){
     this.config = config;
+    this.astHandle = astHandle;
     this.files = this._getContainFiles();
   }
   /**
@@ -36,7 +37,8 @@ export default class {
         return !this.match(item, exclude) && !this.match(item, commonExclude);
       }).map(item => {
         let instance = new stcFile({
-          path: item
+          path: item,
+          astHandle: this.astHandle
         });
         instance.type = type;
         return instance;

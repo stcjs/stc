@@ -5,6 +5,7 @@ import cluster from 'cluster';
 import os from 'os';
 import StcCluster from 'stc-cluster';
 import StcPlugin from 'stc-plugin';
+import astHandle from './ast_handle.js';
 
 const clusterDebug = debug('cluster');
 
@@ -28,10 +29,18 @@ export default class {
     });
   }
   /**
-   * task handler
+   * task handler, invoked in worker
    */
   taskHandler(config){
     let {type, pluginIndex, file, options} = config;
+    //get file ast
+    if(type === 'getAst'){
+      file = this.fileManage.getFileByPath(file);
+      file.setContent(config.content);
+      return file.getAst();
+    }
+    
+    //invoke plugin
     let plugin = this.config[type][pluginIndex].plugin;
     if(!plugin){
       throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
@@ -40,7 +49,7 @@ export default class {
     return this.invokePlugin(plugin, file, options);
   }
   /**
-   * invoke handler
+   * invoke handler, invoked in master
    */
   invokeHandler(config){
     let {method, args, options, file} = config;
@@ -166,7 +175,7 @@ export default class {
    * run
    */
   async run(){
-    this.fileManage = new FileManage(this.config);
+    this.fileManage = new FileManage(this.config, astHandle);
     if(cluster.isMaster){
       try{
         await this.parallel('transpile', this.transpileCallback.bind(this));
