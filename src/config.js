@@ -36,7 +36,7 @@ export default class {
         exclude: []
       },
       dependence: [
-        {plugin: stcDep, include: [{type: 'template'}]}
+        {plugin: stcDep, name: 'defaultDepParser', include: [{type: 'template'}]}
       ]
     };
   }

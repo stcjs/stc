@@ -23,6 +23,8 @@
   ],
   "main": "lib/index.js",
   "dependencies": {
+    "babel-generator": "^6.9.0",
+    "babylon": "^6.8.0",
     "debug": "^2.2.0",
     "stc-file": "stcjs/stc-file",
     "stc-helper": "stcjs/stc-helper"
