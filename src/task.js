@@ -1,11 +1,11 @@
-import FileManage from './file_manage.js';
-//import {mkdir, isFunction} from 'stc-helper';
 import debug from 'debug';
 import cluster from 'cluster';
 import StcCluster from 'stc-cluster';
 import StcPlugin from 'stc-plugin';
+import InvokePlugin from 'stc-plugin-invoke';
+
 import astHandle from './ast_handle.js';
-import InvokePlugin from './invoke_plugin.js';
+import FileManage from './file_manage.js';
 
 const clusterDebug = debug('cluster');
 
@@ -19,14 +19,24 @@ export default class {
   constructor(config){
     this.config = config;
     this.fileManage = new FileManage(this.config, astHandle);
-    this.cluster = new StcCluster({
-      workers: config.common.workers,
+    this.cluster = this.getClusterInstance();
+  }
+  /**
+   * get cluster instance
+   */
+  getClusterInstance(){
+    let instance = new StcCluster({
+      workers: this.config.common.workers,
       taskHandler: this.taskHandler.bind(this),
       invokeHandler: this.invokeHandler.bind(this),
       logger: msg => {
         clusterDebug(msg);
       }
     });
+    if(this.config.common.cluster !== false){
+      instance.start();
+    }
+    return instance;
   }
   /**
    * task handler, invoked in worker
