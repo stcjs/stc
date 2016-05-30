@@ -2,7 +2,7 @@
 
 import Config from './config.js';
 import Task from './task.js';
-import {isObject} from 'stc-helper';
+import {isObject, extend} from 'stc-helper';
 
 /**
  * all configs

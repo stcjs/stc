@@ -1,11 +1,11 @@
 import FileManage from './file_manage.js';
-import {isObject, mkdir, isFunction} from 'stc-helper';
+//import {mkdir, isFunction} from 'stc-helper';
 import debug from 'debug';
 import cluster from 'cluster';
-import os from 'os';
 import StcCluster from 'stc-cluster';
 import StcPlugin from 'stc-plugin';
 import astHandle from './ast_handle.js';
+import InvokePlugin from './invoke_plugin.js';
 
 const clusterDebug = debug('cluster');
 
@@ -18,7 +18,7 @@ export default class {
    */
   constructor(config){
     this.config = config;
-    this.fileManage = null;
+    this.fileManage = new FileManage(this.config, astHandle);
     this.cluster = new StcCluster({
       workers: config.common.workers,
       taskHandler: this.taskHandler.bind(this),
@@ -32,7 +32,7 @@ export default class {
    * task handler, invoked in worker
    */
   taskHandler(config){
-    let {type, pluginIndex, file, options} = config;
+    let {type, pluginIndex, file} = config;
     //get file ast
     if(type === 'getAst'){
       file = this.fileManage.getFileByPath(file);
@@ -41,12 +41,18 @@ export default class {
     }
     
     //invoke plugin
-    let plugin = this.config[type][pluginIndex].plugin;
+    let {plugin, options} = this.config[type][pluginIndex];
     if(!plugin){
       throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
     }
     file = this.fileManage.getFileByPath(file);
-    return this.invokePlugin(plugin, file, options);
+    let instance = new InvokePlugin(plugin, file, {
+      config: this.config,
+      options,
+      fileManage: this.fileManage,
+      cluster: this.cluster
+    });
+    return instance.run();
   }
   /**
    * invoke handler, invoked in master
@@ -54,131 +60,59 @@ export default class {
   invokeHandler(config){
     let {method, args, options, file} = config;
     file = this.fileManage.getFileByPath(file);
-    let cls = this.getPluginClass(StcPlugin);
-    let instance = new cls(file, options, this.config, this.cluster);
-    return instance[method](...args);
+    let instance = new InvokePlugin(StcPlugin, file, {
+      config: this.config,
+      options: options,
+      fileManage: this.fileManage,
+      cluster: this.cluster
+    });
+    return instance.invokePluginMethod(method, args);
   }
   /**
-   * get plugin class
+   * run plugin task
    */
-  getPluginClass(plugin){
-    if(plugin && plugin.__esModule){
-      return plugin.default;
+  async runPluginTask(pluginOptions, extConf){
+    //turn off plugin
+    if(pluginOptions.on === false){
+      return;
     }
-    return plugin;
-  }
-  /**
-   * invokePlugin
-   */
-  invokePlugin(plugin, file, options, useCluster, config = {}){
-    let cls = this.getPluginClass(plugin);
-    if(cluster.isMaster){
-      if(!useCluster){
-        useCluster = cls.cluster;
-        if(isFunction(useCluster)){
-          useCluster = useCluster();
-        }
-      }
-      if(useCluster){
-        return this.cluster.doTask({
-          type: config.type,
-          pluginIndex: config.pluginIndex,
-          file: file.path,
-          options
-        });
-      }
+    //no files matched
+    let files = this.fileManage.getFiles(pluginOptions.include, pluginOptions.exclude);
+    if(!files.length){
+      return;
     }
-    return file.promise.then(() => {
-      let instance = new cls(file, options, this.config, this.cluster);
-      let promise = Promise.resolve(instance.run());
-      file.promise = promise;
-      return promise;
+    return InvokePlugin.runAll(pluginOptions.plugin, files, {
+      config: this.config,
+      options: pluginOptions.options,
+      cluster: this.cluster,
+      fileManage: this.fileManage,
+      extConf
     });
   }
   /**
-   * parallel
+   * parallel to execute
    */
-  parallel(type, callback){
+  parallel(type){
     let config = this.config[type];
     if(!config){
       return;
     }
     let promises = config.map((item, pluginIndex) => {
-      //close task for temporary
-      if(item.on === false){
-        return;
-      }
-      let files = this.fileManage.getFiles(item.include, item.exclude);
-      if(!files.length){
-        return;
-      }
-      let {plugin, options} = item;
-      let promises = files.map(file => {
-        return this.invokePlugin(plugin, file, options, false, {
-          pluginIndex,
-          type
-        }).then(data => {
-          let cls = this.getPluginClass(plugin);
-          //plugin callback in master
-          if(cls.prototype.update){
-            let instance = new cls(file, options, this.config);
-            return instance.update(data);
-          }
-          return callback && callback(file, data);
-        });
+      return this.runPluginTask(item, {
+        type,
+        pluginIndex
       });
-      return Promise.all(promises);
     });
     return Promise.all(promises);
-  }
-  /**
-   * serial
-   */
-  async serial(type){
-    let config = this.config[type];
-    if(!config){
-      return;
-    }
-    let keys = [];
-    if(isObject(config)){
-      keys = Object.keys(config);
-      config = keys.map(key => config[key]);
-    }
-    for(let i = 0, length = config.length; i < length; i++){
-      let item = config[i];
-      if(item.on === false){
-        continue;
-      }
-      let files = this.fileManage.getFiles(item.include, item.exclude);
-      if(!files.length){
-        return;
-      }
-      let {plugin, options} = item;
-      let promises = files.map(file => {
-        return file.promise.then(() => {
-          let instance = new plugin(file, options, this.config);
-          let promise = instance.run();
-          file.promise = promise;
-          return promise;
-        });
-      });
-      await Promise.all(promises);
-    }
-  }
-  /**
-   * transpile callback
-   */
-  transpileCallback(file, ret){
-    console.log(file, ret)
   }
   /**
    * run
    */
   async run(){
-    this.fileManage = new FileManage(this.config, astHandle);
     if(cluster.isMaster){
+      console.time('task');
       try{
-        await this.parallel('transpile', this.transpileCallback.bind(this));
+        await this.parallel('transpile');
         //await this.parallel('dependence');
         //await this.serial('workflow');
       }catch(err){
@@ -186,6 +120,8 @@ export default class {
         process.exit(100);
       }
       this.cluster.stop();
+      console.timeEnd('task');
     }
+    
   }
 }
