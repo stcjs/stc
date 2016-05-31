@@ -3,6 +3,9 @@ import cluster from 'cluster';
 import StcCluster from 'stc-cluster';
 import StcPlugin from 'stc-plugin';
 import InvokePlugin from 'stc-plugin-invoke';
+import path from 'path';
+import fs from 'fs';
+import {mkdir, promisify} from 'stc-helper';
 
 import astHandle from './ast_handle.js';
 import FileManage from './file_manage.js';
@@ -116,6 +119,37 @@ export default class {
     return Promise.all(promises);
   }
   /**
+   * serial to execute
+   */
+  async serial(type){
+    let config = this.config[type];
+    if(!config){
+      return;
+    }
+    let length = config.length;
+    for(let i = 0; i < length; i++){
+      await this.runPluginTask(config[i], {
+        type,
+        pluginIndex: i
+      });
+    }
+  }
+  /**
+   * output files
+   */
+  output(){
+    let outputPath = this.config.common.outputPath;
+    let files = this.fileManage.files;
+    let promises = files.map(async (file) => {
+      let savePath = path.join(outputPath, file.path);
+      mkdir(path.dirname(savePath));
+      let content = await file.getContent();
+      let writeFile = promisify(fs.writeFile, fs);
+      return writeFile(savePath, content);
+    });
+    return Promise.all(promises);
+  }
+  /**
    * run
    */
   async run(){
@@ -123,8 +157,9 @@ export default class {
       console.time('task');
       try{
         await this.parallel('transpile');
-        //await this.parallel('dependence');
-        //await this.serial('workflow');
+        await this.parallel('dependence');
+        await this.serial('workflow');
+        await this.output();
       }catch(err){
         console.log(err);
         process.exit(100);
