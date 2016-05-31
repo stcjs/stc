@@ -7,7 +7,7 @@ import path from 'path';
 import fs from 'fs';
 import {mkdir, promisify} from 'stc-helper';
 
-import astHandle from './ast_handle.js';
+import {parse, stringify} from './ast_handle.js';
 import FileManage from './file_manage.js';
 
 const clusterDebug = debug('cluster');
@@ -21,7 +21,10 @@ export default class {
    */
   constructor(config){
     this.config = config;
-    this.fileManage = new FileManage(this.config, astHandle);
+    this.fileManage = new FileManage(this.config, {
+      parse,
+      stringify
+    });
     this.cluster = this.getClusterInstance();
   }
   /**
@@ -172,7 +175,6 @@ export default class {
    */
   async run(){
     if(cluster.isMaster){
-      console.time('task');
       try{
         await this.parallel('transpile');
         await this.parallel('dependence');
@@ -181,9 +183,12 @@ export default class {
       }catch(err){
         console.log(err);
         process.exit(100);
+        return;
       }
-      this.cluster.stop();
-      console.timeEnd('task');
+      //this.cluster.stop();
+      let endTime = Date.now();
+      console.log('task time: ', endTime - stcStartTime, 'ms');
+      process.exit(0);
     }
     
   }

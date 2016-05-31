@@ -1,5 +1,10 @@
 'use strict';
 
+global.stcStartTime = Date.now();
+
+require('babel-runtime/core-js/promise').default = require('bluebird');
+global.Promise = require('bluebird');
+
 import Config from './config.js';
 import Task from './task.js';
 import {isObject, extend} from 'stc-helper';

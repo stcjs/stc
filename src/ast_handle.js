@@ -1,6 +1,8 @@
-import babylon from 'babylon';
 import babelGenerator from 'babel-generator';
 import flkit from 'flkit';
+
+//babylon can not use import
+const babylon = require('babylon');
 
 /**
  * parse content to ast
