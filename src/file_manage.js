@@ -107,7 +107,17 @@ export default class {
       if(this.match(item, include) && !this.match(item, exclude)){
         return true;
       }
+    }).sort((a, b) => {
+      //sort with file size
+      return a.stat.size > b.stat.size ? 1 : -1;
     });
     return files;
+  }
+  /**
+   * get console files
+   */
+  getConsoleFiles(files = this.files){
+    let consoleFiles = files.map(file => file.path);
+    return JSON.stringify(consoleFiles);
   }
 }

@@ -10,7 +10,10 @@ import {mkdir, promisify} from 'stc-helper';
 import {parse, stringify} from './ast_handle.js';
 import FileManage from './file_manage.js';
 
-const clusterDebug = debug('cluster');
+const clusterLog = debug('cluster');
+const pluginTime = debug('pluginTime');
+const pluginFileTime = debug('pluginFileTime');
+const pluginFilesLog = debug('pluginFiles');
 
 /**
  * task class
@@ -35,9 +38,7 @@ export default class {
       workers: this.config.common.workers,
       taskHandler: this.taskHandler.bind(this),
       invokeHandler: this.invokeHandler.bind(this),
-      logger: msg => {
-        clusterDebug(msg);
-      }
+      logger: clusterLog
     });
     if(this.config.common.cluster !== false){
       instance.start();
@@ -66,7 +67,8 @@ export default class {
       config: this.config,
       options,
       fileManage: this.fileManage,
-      cluster: this.cluster
+      cluster: this.cluster,
+      logger: pluginFileTime
     });
     return instance.run();
   }
@@ -115,13 +117,22 @@ export default class {
     if(!files.length){
       return;
     }
-    return InvokePlugin.runAll(pluginOptions.plugin, files, {
+    let pluginName = InvokePlugin.getPluginClass(pluginOptions.plugin).name;
+
+    pluginFilesLog(`${pluginName}: length=${files.length}, files=${this.fileManage.getConsoleFiles(files)}`);
+    let startTime = Date.now();
+    let ret = await InvokePlugin.runAll(pluginOptions.plugin, files, {
       config: this.config,
       options: pluginOptions.options,
       cluster: this.cluster,
       fileManage: this.fileManage,
-      extConf
+      extConf,
+      logger: pluginFileTime
     });
+    let endTime = Date.now();
+    
+    pluginTime(`${pluginName}: length=${files.length}, time=${endTime - startTime}ms`);
+    return ret;
   }
   /**
    * parallel to execute
@@ -175,6 +186,7 @@ export default class {
    */
   async run(){
     if(cluster.isMaster){
+      let startTime = Date.now();
       try{
         await this.parallel('transpile');
         await this.parallel('dependence');
@@ -187,7 +199,7 @@ export default class {
       }
       //this.cluster.stop();
       let endTime = Date.now();
-      console.log('task time: ', endTime - stcStartTime, 'ms');
+      console.log('Build finish, Total time: ' + Math.ceil((endTime - startTime)/1000) + 's');
       process.exit(0);
     }
     
