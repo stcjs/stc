@@ -44,11 +44,11 @@ export default class {
   /**
    * task handler, invoked in worker
    */
-  taskHandler(config){
+  async taskHandler(config){
     let {type, pluginIndex, file} = config;
     //get file ast
     if(type === 'getAst'){
-      file = this.fileManage.getFileByPath(file);
+      file = await this.getFileInWorker(file);
       file.setContent(config.content);
       return file.getAst();
     }
@@ -58,7 +58,7 @@ export default class {
     if(!plugin){
       throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
     }
-    file = this.fileManage.getFileByPath(file);
+    file = await this.getFileInWorker(file);
     let instance = new InvokePlugin(plugin, file, {
       config: this.config,
       options,
@@ -73,6 +73,9 @@ export default class {
   invokeHandler(config){
     let {method, args, options, file} = config;
     file = this.fileManage.getFileByPath(file);
+    if(method === 'getFileByPath'){
+      return file.pathHistory;
+    }
     let instance = new InvokePlugin(StcPlugin, file, {
       config: this.config,
       options: options,
@@ -80,6 +83,21 @@ export default class {
       cluster: this.cluster
     });
     return instance.invokePluginMethod(method, args);
+  }
+  /**
+   * get file in worker
+   */
+  async getFileInWorker(filepath){
+    let file = this.fileManage.getFileByPath(filepath);
+    if(file){
+      return file;
+    }
+    let pathHistory = await this.cluster.invoke({
+      method: 'getFileByPath',
+      file: filepath
+    });
+    file = this.fileManage.getFileByPathHistory(pathHistory);
+    return file;
   }
   /**
    * run plugin task

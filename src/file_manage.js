@@ -79,7 +79,20 @@ export default class {
   getFileByPath(filepath){
     let file;
     this.files.some(item => {
-      if(item.path === filepath){
+      if(item.path === filepath || item.pathHistory.indexOf(filepath) > -1){
+        file = item;
+        return true;
+      }
+    });
+    return file;
+  }
+  /**
+   * get file by path history
+   */
+  getFileByPathHistory(pathHistory){
+    let file;
+    this.files.some(item => {
+      if(pathHistory.indexOf(item.path) > -1){
         file = item;
         return true;
       }
