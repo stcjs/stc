@@ -49,14 +49,13 @@ export default class {
    * task handler, invoked in worker
    */
   async taskHandler(config){
-    let {type, pluginIndex, file} = config;
+    let {type, pluginIndex, file, forceInMaster} = config;
     //get file ast
     if(type === 'getAst'){
       file = await this.getFileInWorker(file);
       file.setContent(config.content);
       return file.getAst();
     }
-    
     //invoke plugin
     let {plugin, options} = this.config[type][pluginIndex];
     if(!plugin){
@@ -68,7 +67,10 @@ export default class {
       options,
       fileManage: this.fileManage,
       cluster: this.cluster,
-      logger: pluginFileTime
+      logger: pluginFileTime,
+      extConf: {
+        forceInMaster
+      }
     });
     return instance.run();
   }
@@ -199,7 +201,7 @@ export default class {
       }
       //this.cluster.stop();
       let endTime = Date.now();
-      console.log('Build finish, Total time: ' + Math.ceil((endTime - startTime)/1000) + 's');
+      console.log('Build finish, Total time: ' + (endTime - startTime) + 'ms');
       process.exit(0);
     }
     
