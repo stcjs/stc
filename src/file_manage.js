@@ -1,4 +1,4 @@
-import {getFiles, isArray, isRegExp, isObject} from 'stc-helper';
+import {getFiles, isArray, isRegExp, isObject, isString} from 'stc-helper';
 import stcFile from 'stc-file';
 
 /**
@@ -77,6 +77,10 @@ export default class {
    * get file by path
    */
   getFileByPath(filepath){
+    //is already stc-file instance
+    if(!isString(filepath) && filepath.path){
+      return filepath;
+    }
     let file;
     this.files.some(item => {
       if(item.path === filepath || item.pathHistory.indexOf(filepath) > -1){
@@ -119,5 +123,32 @@ export default class {
   getConsoleFiles(files = this.files){
     let consoleFiles = files.map(file => file.path);
     return JSON.stringify(consoleFiles);
+  }
+  /**
+   * add file
+   */
+  addFile(filepath, content){
+    let file;
+    this.file.some(item => {
+      if(item.path === filepath){
+        file = item;
+        return true;
+      }
+    });
+    if(file){
+      if(content){
+        file.setContent(content);
+      }
+      return file;
+    }
+    let instance = new stcFile({
+      path: filepath,
+      astHandle: this.astHandle
+    });
+    if(content){
+      instance.setContent(content);
+    }
+    this.files.push(instance);
+    return instance;
   }
 }
