@@ -24,8 +24,8 @@ export default class {
         include: [],
         exclude: [],
         jsTpl: {
-          type: [],
-          engine: [],
+          type: ['text/html', 'text/template'],
+          engine: '',
           adapter: '',
           ld: '',
           rd: ''

@@ -10,7 +10,7 @@ stc.config({
     exclude: [],
     jsTpl: {
       type: [],
-      engine: [],
+      engine: '',
       adapter: '',
       ld: '',
       rd: ''

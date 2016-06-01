@@ -25,8 +25,12 @@ export default class {
   constructor(config){
     this.config = config;
     this.fileManage = new FileManage(this.config, {
-      parse,
-      stringify
+      parse: (...args) => {
+        return parse(...args, this.config);
+      },
+      stringify: (...args) => {
+        return stringify(...args, this.config);
+      }
     });
     this.cluster = this.getClusterInstance();
   }
