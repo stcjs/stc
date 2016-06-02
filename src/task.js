@@ -1,139 +1,50 @@
-import debug from 'debug';
-import cluster from 'cluster';
-import StcCluster from 'stc-cluster';
-import StcPlugin from 'stc-plugin';
-import InvokePlugin from 'stc-plugin-invoke';
+import {isMaster} from 'cluster';
 import path from 'path';
+import PluginInvoke from 'stc-plugin-invoke';
+import debug from 'debug';
 import fs from 'fs';
 import {mkdir, promisify} from 'stc-helper';
 
-import {parse, stringify} from './ast_handle.js';
-import FileManage from './file_manage.js';
+import STC from './stc.js';
 
-const clusterLog = debug('cluster');
-const pluginTime = debug('pluginTime');
-const pluginFileTime = debug('pluginFileTime');
 const pluginFilesLog = debug('pluginFiles');
+const pluginFileTime = debug('pluginFileTime');
+const pluginTime = debug('pluginTime');
 
 /**
- * task class
+ * Task class
  */
-export default class {
+export default class Task {
   /**
    * constructor
    */
   constructor(config){
     this.config = config;
-    this.fileManage = new FileManage(this.config, {
-      parse: (...args) => {
-        return parse(...args, this.config);
-      },
-      stringify: (...args) => {
-        return stringify(...args, this.config);
-      }
-    });
-    this.cluster = this.getClusterInstance();
-  }
-  /**
-   * get cluster instance
-   */
-  getClusterInstance(){
-    let instance = new StcCluster({
-      workers: this.config.common.workers,
-      taskHandler: this.taskHandler.bind(this),
-      invokeHandler: this.invokeHandler.bind(this),
-      logger: clusterLog
-    });
-    if(this.config.common.cluster !== false){
-      instance.start();
-    }
-    return instance;
-  }
-  /**
-   * task handler, invoked in worker
-   */
-  async taskHandler(config){
-    let {type, pluginIndex, file, forceInMaster} = config;
-    //get file ast
-    if(type === 'getAst'){
-      file = await this.getFileInWorker(file);
-      file.setContent(config.content);
-      return file.getAst();
-    }
-    //invoke plugin
-    let {plugin, options} = this.config[type][pluginIndex];
-    if(!plugin){
-      throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
-    }
-    file = await this.getFileInWorker(file);
-    let instance = new InvokePlugin(plugin, file, {
-      config: this.config,
-      options,
-      fileManage: this.fileManage,
-      cluster: this.cluster,
-      logger: pluginFileTime,
-      extConf: {
-        forceInMaster
-      }
-    });
-    return instance.run();
-  }
-  /**
-   * invoke handler, invoked in master
-   */
-  invokeHandler(config){
-    let {method, args, options, file} = config;
-    file = this.fileManage.getFileByPath(file);
-    if(method === 'getFileByPath'){
-      return file.pathHistory;
-    }
-    let instance = new InvokePlugin(StcPlugin, file, {
-      config: this.config,
-      options: options,
-      fileManage: this.fileManage,
-      cluster: this.cluster
-    });
-    return instance.invokePluginMethod(method, args);
-  }
-  /**
-   * get file in worker
-   */
-  async getFileInWorker(filepath){
-    let file = this.fileManage.getFileByPath(filepath);
-    if(file){
-      return file;
-    }
-    let pathHistory = await this.cluster.invoke({
-      method: 'getFileByPath',
-      file: filepath
-    });
-    file = this.fileManage.getFileByPathHistory(pathHistory);
-    return file;
+    this.stc = new STC(config);
   }
   /**
    * run plugin task
    */
-  async runPluginTask(pluginOptions, extConf){
+  async runPluginTask(pluginOptions, ext){
     //turn off plugin
     if(pluginOptions.on === false){
       return;
     }
+    let {include, exclude} = pluginOptions;
     //no files matched
-    let files = this.fileManage.getFiles(pluginOptions.include, pluginOptions.exclude);
+    let files = this.stc.resource.getFiles(include, exclude);
     if(!files.length){
       return;
     }
-    let pluginName = InvokePlugin.getPluginClass(pluginOptions.plugin).name;
-
-    pluginFilesLog(`${pluginName}: length=${files.length}, files=${this.fileManage.getConsoleFiles(files)}`);
+    let pluginName = PluginInvoke.getPluginClass(pluginOptions.plugin).name;
+    let consoleFiles = this.stc.resource.getConsoleFiles(files);
+    pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
     let startTime = Date.now();
-    let ret = await InvokePlugin.runAll(pluginOptions.plugin, files, {
-      config: this.config,
+    let ret = await PluginInvoke.runAll(pluginOptions.plugin, files, {
+      stc: this.stc,
       options: pluginOptions.options,
-      cluster: this.cluster,
-      fileManage: this.fileManage,
-      extConf,
-      logger: pluginFileTime
+      logger: pluginFileTime,
+      ext
     });
     let endTime = Date.now();
     
@@ -177,7 +88,7 @@ export default class {
    */
   output(){
     let outputPath = this.config.common.outputPath;
-    let files = this.fileManage.files;
+    let files = this.stc.resource.files;
     let promises = files.map(async (file) => {
       let savePath = path.join(outputPath, file.path);
       mkdir(path.dirname(savePath));
@@ -191,7 +102,7 @@ export default class {
    * run
    */
   async run(){
-    if(cluster.isMaster){
+    if(isMaster){
       let startTime = Date.now();
       try{
         await this.parallel('transpile');
@@ -208,6 +119,5 @@ export default class {
       console.log('Build finish, Total time: ' + (endTime - startTime) + 'ms');
       process.exit(0);
     }
-    
   }
 }

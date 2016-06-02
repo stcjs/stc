@@ -1,5 +1,5 @@
 import {extend} from 'stc-helper';
-import stcDep from 'stc-dep';
+import stcDepParser from 'stc-dep-parser';
 /**
  * config class
  */
@@ -36,7 +36,7 @@ export default class {
         exclude: []
       },
       dependence: [
-        {plugin: stcDep, name: 'defaultDepParser', include: [{type: 'template'}]}
+        {plugin: stcDepParser, name: 'defaultDepParser', include: [{type: 'template'}]}
       ]
     };
   }

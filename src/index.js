@@ -3,18 +3,19 @@
 require('babel-runtime/core-js/promise').default = require('bluebird');
 global.Promise = require('bluebird');
 
-import Config from './config.js';
-import Task from './task.js';
+
 import {isObject, extend} from 'stc-helper';
 
+import Config from './config.js';
+import Task from './task.js';
 /**
  * all configs
  */
 let configs = {};
 /**
- * STC class
+ * Application class
  */
-const STC = class {
+const Application = class Application {
   /**
    * constructor
    */
@@ -102,9 +103,9 @@ const STC = class {
    * start workflow
    */
   start(){
-    const instance = new Task(this.config());
+    let instance = new Task(this.config());
     instance.run();
   }
 };
 
-module.exports = new STC();
+module.exports = new Application();

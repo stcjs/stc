@@ -2,9 +2,9 @@ import {getFiles, isArray, isRegExp, isObject, isString} from 'stc-helper';
 import stcFile from 'stc-file';
 
 /**
- * file manage
+ * resource manage
  */
-export default class {
+export default class Resource {
   /**
    * constructor
    */
