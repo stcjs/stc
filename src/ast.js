@@ -8,6 +8,21 @@ import {
 let babylon = null;
 let babelGenerator = null;
 
+
+/**
+ * get attr value in attrs
+ */
+const getAttrValue = (attrs, name) => {
+  let value;
+  attrs.some(item => {
+    if(item.nameLowerCase === name){
+      value = item.value;
+      return true;
+    }
+  });
+  return value;
+}
+
 /**
  * parse content
  */
@@ -33,7 +48,18 @@ const parseContent = (parser, content, config, options = {}) => {
 const parseHtml = (content, config, options) => {
   let tokens = parseContent(HtmlTokenize, content, config, options);
   tokens.forEach(token => {
-    //style
+    // tag start
+    // parse style in tag
+    if(token.type === TokenType.HTML_TAG_START) {
+      let attrs = token.detail.attrs;
+      let styleValue = getAttrValue(attrs, 'style');
+      if(styleValue){
+        let tokens = parseCss(`*{${styleValue}}`, config, options);
+        tokens = tokens.slice(2, tokens.length - 1);
+        token.ext.styleTokens = tokens;
+      }
+    }
+    // style
     if(token.type === TokenType.HTML_TAG_STYLE){
       let contentToken = token.ext.content;
       let cssTokens = parseCss(contentToken.value, config, {
@@ -43,7 +69,7 @@ const parseHtml = (content, config, options) => {
      contentToken.ext.tokens = cssTokens;
      return;
     }
-    //js tpl
+    // js tpl
     if(token.type === TokenType.HTML_TAG_SCRIPT){
       let startToken = token.ext.start;
       let {type} = startToken.ext;
