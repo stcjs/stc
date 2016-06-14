@@ -1,7 +1,9 @@
 import {
   HtmlTokenize,
   CssTokenize,
-  TokenType
+  TokenType,
+  htmlToken2Text,
+  cssToken2Text
 } from 'flkit';
 
 import {isArray} from 'stc-helper';
@@ -9,7 +11,6 @@ import {isArray} from 'stc-helper';
 //babylon can not use import
 let babylon = null;
 let babelGenerator = null;
-
 
 /**
  * get attr value in attrs
@@ -117,26 +118,43 @@ export function parse(content, fileInstance, config){
 }
 
 /**
+ * stringify js
+ */
+const stringifyJS = (ast, fileInstance) => {
+  if(!babelGenerator){
+    babelGenerator = require('babel-generator');
+    if(babelGenerator.default){
+      babelGenerator = babelGenerator.default;
+    }
+  }
+  return babelGenerator(ast, {
+    comments: false,
+    filename: fileInstance && fileInstance.path
+  });
+}
+
+/**
+ * stringify css
+ */
+const stringifyCSS = (ast, fileInstance) => {
+  return cssToken2Text(ast);
+}
+
+/**
  * convert ast to content
  */
 export function stringify(ast, fileInstance, config){
   let extname = fileInstance.extname.toLowerCase();
-  switch(extname){
-    case 'js':
-      if(!babelGenerator){
-        babelGenerator = require('babel-generator');
-        if(babelGenerator.default){
-          babelGenerator = babelGenerator.default;
-        }
-      }
-      return babelGenerator(ast, {
-        comments: false,
-        filename: fileInstance.path
-      });
-    case 'css':
-      return '';
+  if(extname === 'js'){
+    return stringifyJS(ast, fileInstance);
+  }
+  if(extname === 'css'){
+    return stringifyCSS(ast, fileInstance);
   }
   if(fileInstance.prop('tpl')){
-    return '';
+    return htmlToken2Text(ast, {
+      js: stringifyJS,
+      css: stringifyCSS
+    });
   }
 }
