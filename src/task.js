@@ -87,7 +87,7 @@ export default class Task {
    * output files
    */
   output(){
-    let outputPath = this.config.common.outputPath;
+    let outputPath = this.config.outputPath;
     let files = this.stc.resource.files;
     let promises = files.map(async (file) => {
       let savePath = path.join(outputPath, file.path);

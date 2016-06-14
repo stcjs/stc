@@ -12,28 +12,27 @@ export default class {
      * default config
      */
     this._config = {
-      common: {
-        exclude: [/Thumbs\.db$/i, /\.svn|\.git/, /\.DStore/i],
-        outputPath: 'output'
+      product: 'default',
+      workers: 0,
+      cluster: true,
+      cache: true,
+      include: '.',
+      exclude: [/Thumbs\.db$/i, /\.svn|\.git/, /\.DStore/i],
+      outputPath: 'output',
+      pathHandle: undefined,
+      tpl: {
+        extname: 'html',
+        engine: '',
+        adapter: undefined,
+        ld: '',
+        rd: ''
       },
-      template: {
+      jsTpl: {
+        type: ['text/html', 'text/template'],
         engine: '',
         adapter: '',
-        ld: [],
-        rd: [],
-        include: [],
-        exclude: [],
-        jsTpl: {
-          type: ['text/html', 'text/template'],
-          engine: '',
-          adapter: '',
-          ld: '',
-          rd: ''
-        }
-      },
-      static: {
-        include: [],
-        exclude: []
+        ld: '',
+        rd: ''
       },
       dependence: [
         {plugin: stcDepParser, name: 'defaultDepParser', include: [{type: 'template'}]}
@@ -54,9 +53,7 @@ export default class {
    */
   set(name, value){
    if(typeof name === 'object'){
-     for(let key in name){
-       this._config[key] = extend(this._config[key], name[key]);
-     }
+     this._config = extend(this._config, name);
      return this;
    }
    this._config[name] = extend(this._config[name], value);

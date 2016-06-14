@@ -85,13 +85,6 @@ const Application = class Application {
    * set preset config
    */
   preset(preset, options = {}){
-    let list = ['common', 'template', 'static', 'transpile', 'dependence', 'workflow'];
-    let flag = list.some(item => {
-      return item in options;
-    });
-    if(!flag){
-      options = {workflow: options};
-    }
     options.transpile = this.transConf(options.transpile);
     options.dependence = this.transConf(options.dependence);
     options.workflow = this.transConf(options.workflow);

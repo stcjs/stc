@@ -30,12 +30,12 @@ export default class STC {
    */
   getClusterInstance(){
     let instance = new StcCluster({
-      workers: this.config.common.workers,
+      workers: this.config.workers,
       taskHandler: this.taskHandler.bind(this),
       invokeHandler: this.invokeHandler.bind(this),
       logger: clusterLog
     });
-    if(this.config.common.cluster !== false){
+    if(this.config.cluster !== false){
       instance.start();
     }
     return instance;

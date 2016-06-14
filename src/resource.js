@@ -11,41 +11,33 @@ export default class Resource {
   constructor(config = {}, astHandle){
     this.config = config;
     this.astHandle = astHandle;
-    this.files = this._getContainFiles();
+    this.files = this.getInitFiles();
   }
   /**
    * get init contain files
    */
-  _getContainFiles(){
-    let list = ['template', 'static'];
-    let totalFiles = [];
-    let commonExclude = this.config.common.exclude;
-    list.forEach(type => {
-      let files = [];
-      let {include, exclude} = this.config[type];
-      if(!isArray(include)){
-        include = [include];
+  getInitFiles(){
+    let files = [];
+    let {include, exclude} = this.config;
+    if(!isArray(include)){
+      include = [include];
+    }
+    include.forEach(itemPath => {
+      if(!itemPath){
+        return;
       }
-      include.forEach(itemPath => {
-        if(!itemPath){
-          return;
-        }
-        let tFiles = getFiles(itemPath, itemPath);
-        files = files.concat(tFiles);
-      });
-      files = files.filter(item => {
-        return !this.match(item, exclude) && !this.match(item, commonExclude);
-      }).map(item => {
-        let instance = new stcFile({
-          path: item,
-          astHandle: this.astHandle
-        });
-        instance.type = type;
-        return instance;
-      });
-      totalFiles = totalFiles.concat(files);
+      let tFiles = getFiles(itemPath, itemPath);
+      files = files.concat(tFiles);
     });
-    return totalFiles;
+    return files.filter(item => {
+      return !this.match(item, exclude);
+    }).map(item => {
+      let instance = new stcFile({
+        path: item,
+        astHandle: this.astHandle
+      });
+      return instance;
+    });
   }
   /**
    * test file match pattern
@@ -63,11 +55,16 @@ export default class Resource {
       if(isRegExp(item)){
         return item.test(filePath);
       }
-      // {type: 'template'}
       if(isObject(item)){
-        return Object.keys(item).every(it => {
-          return file[it] === item[it];
-        });
+        // {type: 'tpl'}
+        if(item.type === 'tpl'){
+          let tplExts = this.config.tpl.extname;
+          if(!isArray(tplExts)){
+            tplExts = [tplExts];
+          }
+          let extname = file.extname || path.extname(file).slice(1);
+          return tplExts.indexOf(extname) > -1;
+        }
       }
       //@TODO support glob pattern?
       return item === filePath;
@@ -150,5 +147,11 @@ export default class Resource {
     }
     this.files.push(instance);
     return instance;
+  }
+  /**
+   * look file with linkPath
+   */
+  lookFile(linkPath){
+    
   }
 }
