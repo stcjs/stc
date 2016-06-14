@@ -48,7 +48,7 @@ export default class Task {
     });
     let endTime = Date.now();
     
-    pluginTime(`${pluginName}: length=${files.length}, time=${endTime - startTime}ms`);
+    pluginTime(`${pluginName}: files=${files.length}, time=${endTime - startTime}ms`);
     return ret;
   }
   /**
