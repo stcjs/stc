@@ -24,7 +24,7 @@ export default class Resource {
    */
   getInitFiles(){
     let files = [];
-    let {include, exclude} = this.config;
+    let {include, exclude, defaultExclude} = this.config;
     if(!isArray(include)){
       include = [include];
     }
@@ -36,7 +36,7 @@ export default class Resource {
       files = files.concat(tFiles);
     });
     return files.filter(item => {
-      return !this.match(item, exclude);
+      return !this.match(item, defaultExclude) && !this.match(item, exclude);
     }).map(item => {
       let instance = new stcFile({
         path: item,

@@ -17,7 +17,8 @@ export default class {
       cluster: true,
       cache: true,
       include: '.',
-      exclude: [/Thumbs\.db$/i, /\.svn|\.git/, /\.DStore/i],
+      exclude: '',
+      defaultExclude: [/Thumbs\.db$/i, /\.svn|\.git/, /\.DS_Store$/i],
       outputPath: 'output',
       pathHandle: undefined,
       tpl: {

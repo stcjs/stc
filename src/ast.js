@@ -107,7 +107,7 @@ export function parse(content, fileInstance, config){
       if(!babylon){
         babylon = require('babylon');
       }
-      return babylon.parse(content);
+      return babylon.parse(content).program;
     case 'css':
       return parseCss(content, config);
   }
@@ -127,10 +127,12 @@ const stringifyJS = (ast, fileInstance) => {
       babelGenerator = babelGenerator.default;
     }
   }
-  return babelGenerator(ast, {
+  let data = babelGenerator(ast, {
     comments: false,
-    filename: fileInstance && fileInstance.path
+    sourceMaps: false,
+    filename: fileInstance && fileInstance.path || ''
   });
+  return data.code;
 }
 
 /**
