@@ -1,5 +1,11 @@
 import {getFiles, isArray, isRegExp, isObject, isString} from 'stc-helper';
 import stcFile from 'stc-file';
+import path from 'path';
+
+/**
+ * look file cache
+ */
+let lookFileCache = {};
 
 /**
  * resource manage
@@ -36,6 +42,9 @@ export default class Resource {
         path: item,
         astHandle: this.astHandle
       });
+      if(this.isTpl(item)){
+        instance.prop('tpl', true);
+      }
       return instance;
     });
   }
@@ -58,17 +67,28 @@ export default class Resource {
       if(isObject(item)){
         // {type: 'tpl'}
         if(item.type === 'tpl'){
-          let tplExts = this.config.tpl.extname;
-          if(!isArray(tplExts)){
-            tplExts = [tplExts];
+          if(file.path){
+            return file.prop('tpl') === true;
           }
-          let extname = file.extname || path.extname(file).slice(1);
-          return tplExts.indexOf(extname) > -1;
+          return this.isTpl(file);
         }
       }
       //@TODO support glob pattern?
       return item === filePath;
     });
+  }
+  /**
+   * check file is template file
+   */
+  isTpl(extname){
+    if(extname.indexOf('.') > -1){
+      extname = path.extname(extname).slice(1);
+    }
+    let exts = this.config.tpl.extname;
+    if(!isArray(exts)){
+      exts = [exts];
+    }
+    return exts.indexOf(extname.toLowerCase()) > -1;
   }
   /**
    * get file by path
@@ -126,7 +146,7 @@ export default class Resource {
    */
   addFile(filepath, content){
     let file;
-    this.file.some(item => {
+    this.files.some(item => {
       if(item.path === filepath){
         file = item;
         return true;
@@ -145,13 +165,58 @@ export default class Resource {
     if(content){
       instance.setContent(content);
     }
+    if(this.isTpl(filepath)){
+      instance.prop('tpl', true);
+    }
     this.files.push(instance);
     return instance;
   }
   /**
-   * look file with linkPath
+   * look file with linkpath
    */
-  lookFile(linkPath){
-    
+  lookFile(linkpath, parentFile){
+    if(lookFileCache[linkpath]){
+      return lookFileCache[linkpath];
+    }
+
+    let filepath;
+    if(this.config.pathHandle){
+      filepath = this.config.pathHandle(linkpath);
+      if(filepath){
+        let file;
+        this.files.some(item => {
+          if(item.pathHistory.indexOf(filepath) > -1){
+            file = item;
+            return true;
+          }
+        });
+        if(file){
+          lookFileCache[linkpath] = file;
+          return file;
+        }
+      }
+    }else{
+      let loop = 0;
+      let linkpaths = linkpath.split('/');
+      let file;
+      while(loop++ < 5 && linkpaths.length){
+        let currentpath = linkpaths.join('/');
+        this.files.some(item => {
+          if(item.pathHistory.indexOf(currentpath) > -1){
+            file = item;
+            return true;
+          }
+        });
+        if(file){
+          break;
+        }
+        linkpaths.shift();
+      }
+      if(file){
+        lookFileCache[linkpath] = file;
+        return file;
+      }
+    }
+    throw new Error('can not find resource `' + linkpath + '` in file `' + parentFile + '`');
   }
 }

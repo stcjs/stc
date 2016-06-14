@@ -4,6 +4,8 @@ import {
   TokenType
 } from 'flkit';
 
+import {isArray} from 'stc-helper';
+
 //babylon can not use import
 let babylon = null;
 let babelGenerator = null;
@@ -21,7 +23,7 @@ const getAttrValue = (attrs, name) => {
     }
   });
   return value;
-}
+};
 
 /**
  * parse content
@@ -46,7 +48,7 @@ const parseContent = (parser, content, config, options = {}) => {
  * parse html
  */
 const parseHtml = (content, config, options) => {
-  let tokens = parseContent(HtmlTokenize, content, config, options);
+  let tokens = parseContent(HtmlTokenize, content, config.tpl, options);
   tokens.forEach(token => {
     // tag start
     // parse style in tag
@@ -76,7 +78,7 @@ const parseHtml = (content, config, options) => {
       let jsTpl = config.jsTpl;
       if(type && jsTpl.type.indexOf(type) > -1){
         let contentToken = token.ext.content;
-        let htmlTokens = parseHtml(contentToken.value, jsTpl, {
+        let htmlTokens = parseHtml(contentToken.value, {tpl: jsTpl}, {
           line: contentToken.loc.start.line,
           col: contentToken.loc.start.col
         });
@@ -94,24 +96,22 @@ const parseCss = (content, config, options) => {
   return parseContent(CssTokenize, content, config, options);
 };
 
-
 /**
  * parse content to ast
  */
 export function parse(content, fileInstance, config){
   let extname = fileInstance.extname.toLowerCase();
   switch(extname){
-    case '.js':
+    case 'js':
       if(!babylon){
         babylon = require('babylon');
       }
       return babylon.parse(content);
-    case '.css':
-      return parseCss(content, config.template);
+    case 'css':
+      return parseCss(content, config);
   }
-  let type = fileInstance.type;
-  if(type === 'template' || extname === '.html'){
-    return parseHtml(content, config.template);
+  if(fileInstance.prop('tpl')){
+    return parseHtml(content, config);
   }
   throw new Error(`file ${fileInstance.path} can not get AST`);
 }
@@ -122,7 +122,7 @@ export function parse(content, fileInstance, config){
 export function stringify(ast, fileInstance, config){
   let extname = fileInstance.extname.toLowerCase();
   switch(extname){
-    case '.js':
+    case 'js':
       if(!babelGenerator){
         babelGenerator = require('babel-generator');
         if(babelGenerator.default){
@@ -133,11 +133,10 @@ export function stringify(ast, fileInstance, config){
         comments: false,
         filename: fileInstance.path
       });
-    case '.css':
+    case 'css':
       return '';
   }
-  let type = fileInstance.type;
-  if(type === 'template' || extname === '.html'){
+  if(fileInstance.prop('tpl')){
     return '';
   }
 }

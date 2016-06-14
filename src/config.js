@@ -35,7 +35,7 @@ export default class {
         rd: ''
       },
       dependence: [
-        {plugin: stcDepParser, name: 'defaultDepParser', include: [{type: 'template'}]}
+        {plugin: stcDepParser, name: 'defaultDepParser', include: [{type: 'tpl'}]}
       ]
     };
   }
