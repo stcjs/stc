@@ -105,6 +105,7 @@ export default class Task {
     if(isMaster){
       let startTime = Date.now();
       try{
+        await this.parallel('lint');
         await this.parallel('transpile');
         await this.parallel('dependence');
         await this.serial('workflow');

@@ -64,22 +64,28 @@ const Application = class Application {
     return options;
   }
   /**
+   * lint
+   */
+  lint(options){
+    return this.config({lint: this.transConf(options)});
+  }
+  /**
    * set transpile config
    */
   transpile(options){
-    return this.config({'transpile': this.transConf(options)});
+    return this.config({transpile: this.transConf(options)});
   }
   /**
    * set dependence config
    */
   dependence(options = {}){
-    return this.config({'dependence': this.transConf(options)});
+    return this.config({dependence: this.transConf(options)});
   }
   /**
    * set workflow config
    */
   workflow(options = {}){
-    return this.config({'workflow': this.transConf(options)});
+    return this.config({workflow: this.transConf(options)});
   }
   /**
    * set preset config
