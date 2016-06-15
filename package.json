@@ -29,7 +29,12 @@
     "debug": "^2.2.0",
     "stc-file": "1.x.x",
     "stc-helper": "1.x.x",
-    "flkit": "3.x.x"
+    "flkit": "3.x.x",
+    "stc-dep-parser": "1.x.x",
+    "stc-cluster": "1.x.x",
+    "stc-plugin": "1.x.x",
+    "stc-plugin-invoke": "1.x.x",
+    "stc-cache": "1.x.x"
   },
   "devDependencies": {
     "ava": "^0.14.0",
