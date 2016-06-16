@@ -11,9 +11,13 @@
 * 分析依赖树
 * 无感知的缓存策略
 
+## 已有插件
+
+* [x] [stc-uglify](https://github.com/stcjs/stc-uglify) - 使用 UglifyJS 压缩 JavaScript
+
 ## 需要开发的插件
 
-* [x] JS 压缩
+
 * [ ] CSS 合并（@import url）
 * [ ] CSS 压缩
 * [ ] JS 合并（document.write）
@@ -28,6 +32,10 @@
 * [ ] JS 模块化合并
 * [ ] 外联资源转为内联资源
 * [ ] 静态资源版本号 
-* [ ] 代码替换功能
+* [ ] 代码替换功能 - welefen
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
+
+## 如何开发
+
+下载 `stc-demo` 项目
