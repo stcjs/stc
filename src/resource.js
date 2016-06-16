@@ -100,7 +100,7 @@ export default class Resource {
     }
     let file;
     this.files.some(item => {
-      if(item.path === filepath || item.pathHistory.indexOf(filepath) > -1){
+      if(item.isPath(filepath)){
         file = item;
         return true;
       }
