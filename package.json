@@ -34,7 +34,8 @@
     "stc-cluster": "1.x.x",
     "stc-plugin": "1.x.x",
     "stc-plugin-invoke": "1.x.x",
-    "stc-cache": "1.x.x"
+    "stc-cache": "1.x.x",
+    "stc-log": "1.x.x"
   },
   "devDependencies": {
     "ava": "^0.14.0",

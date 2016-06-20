@@ -4,6 +4,7 @@ import StcPlugin from 'stc-plugin';
 import PluginInvoke from 'stc-plugin-invoke';
 import StcCache from 'stc-cache';
 import {TokenType} from 'flkit';
+import StcLog from 'stc-log';
 
 import {parse, stringify} from './ast.js';
 import Resource from './resource.js';
@@ -24,6 +25,7 @@ export default class STC {
     this.cluster = this.getClusterInstance();
     this.cache = StcCache;
     this.TokenType = TokenType;
+    this.log = new StcLog();
   }
   /**
    * get cluster instance
