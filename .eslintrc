@@ -23,10 +23,5 @@
     "no-cond-assign": 0,
     "no-new-func": 0,
     "no-labels": 0
-  },
-  "globals": {
-    "think": true,
-    "thinkCache": true,
-    "thinkData": true
   }
 }

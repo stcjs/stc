@@ -39,4 +39,4 @@
 
 ## 如何开发
 
-下载 `stc-demo` 项目
+[如何开发？](https://github.com/stcjs/stc/wiki/%E5%A6%82%E4%BD%95%E5%BC%80%E5%8F%91%EF%BC%9F)
