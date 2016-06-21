@@ -111,7 +111,11 @@ export default class Task {
         await this.serial('workflow');
         await this.output();
       }catch(err){
-        this.stc.log.display(err, 'error');
+        if(err.className){
+          this.stc.log.display(err, 'error');
+        }else{
+          console.error(err);
+        }
         process.exit(100);
         return;
       }
