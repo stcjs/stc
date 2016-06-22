@@ -33,8 +33,8 @@ export default class STC {
   getClusterInstance(){
     let instance = new StcCluster({
       workers: this.config.workers,
-      taskHandler: this.taskHandler.bind(this),
-      invokeHandler: this.invokeHandler.bind(this),
+      workerHandle: this.workerHandle.bind(this),
+      masterHandle: this.masterHandle.bind(this),
       logger: clusterLog
     });
     if(this.config.cluster !== false){
@@ -57,9 +57,9 @@ export default class STC {
     return instance;
   }
   /**
-   * task handler, invoked in worker
+   * invoked in worker
    */
-  async taskHandler(config){
+  async workerHandle(config){
     let {type, pluginIndex, file} = config;
     
     //get file ast
@@ -88,9 +88,9 @@ export default class STC {
     return instance.run();
   }
   /**
-   * invoke handler, invoked in master
+   * invoked in master
    */
-  invokeHandler(config){
+  masterHandle(config){
     let {method, args, options, file} = config;
     file = this.resource.getFileByPath(file);
     if(method === 'getFileByPath'){
@@ -110,7 +110,7 @@ export default class STC {
     if(file){
       return file;
     }
-    let pathHistory = await this.cluster.invoke({
+    let pathHistory = await this.cluster.workerInvoke({
       method: 'getFileByPath',
       file: filepath
     });
