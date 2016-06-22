@@ -27,15 +27,16 @@
     "babylon": "^6.8.0",
     "bluebird": "^3.4.0",
     "debug": "^2.2.0",
+    "flkit": "3.x.x",
+    "source-map-support": "^0.4.0",
+    "stc-cache": "1.x.x",
+    "stc-cluster": "1.x.x",
+    "stc-dep-parser": "1.x.x",
     "stc-file": "1.x.x",
     "stc-helper": "1.x.x",
-    "flkit": "3.x.x",
-    "stc-dep-parser": "1.x.x",
-    "stc-cluster": "1.x.x",
+    "stc-log": "1.x.x",
     "stc-plugin": "1.x.x",
-    "stc-plugin-invoke": "1.x.x",
-    "stc-cache": "1.x.x",
-    "stc-log": "1.x.x"
+    "stc-plugin-invoke": "1.x.x"
   },
   "devDependencies": {
     "ava": "^0.14.0",

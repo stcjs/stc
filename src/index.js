@@ -8,6 +8,14 @@ import {isObject, extend} from 'stc-helper';
 
 import Config from './config.js';
 import Task from './task.js';
+
+import sourceMapSuppert from 'source-map-support';
+
+sourceMapSuppert.install({
+  environment: 'node',
+  emptyCacheBetweenOperations: true
+});
+
 /**
  * all configs
  */
