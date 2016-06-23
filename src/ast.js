@@ -159,4 +159,5 @@ export function stringify(ast, fileInstance, config){
       css: stringifyCSS
     });
   }
+  throw new Error(`can not convert file ${fileInstance.path} AST to string`);
 }
