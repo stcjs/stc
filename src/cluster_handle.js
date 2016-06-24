@@ -26,6 +26,24 @@ export const master = {
       return instance.get(name);
     }
     return instance.set(name, value);
+  },
+  /**
+   * get file promise key & value
+   */
+  getFilePromise: async (config, stc) => {
+    let file = await stc.getFileByPath(config.file);
+    let data = file.promise(config.key);
+    if(config.deferred){
+      file.promise(config.key, undefined, 'set');
+    }
+    return data;
+  },
+  /**
+   * resolve file deferred
+   */
+  resolveFilePromise: async (config, stc) => {
+    let file = await stc.getFileByPath(config.file);
+    file.promise(config.key, config.value, 'update');
   }
 };
 
