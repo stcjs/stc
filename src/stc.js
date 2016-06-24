@@ -29,6 +29,8 @@ export default class STC {
     this.resource = this.getResourceInstance();
     this.cluster = this.getClusterInstance();
     this.cache = StcCache;
+    //store all cache instances
+    this.cacheInstances = {};
     this.TokenType = TokenType;
     this.log = new StcLog();
   }
