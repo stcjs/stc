@@ -34,7 +34,7 @@ export const worker = {
    * get file ast
    */
   getAst: async (config, stc) => {
-    let file = await stc.getFileInWorker(config.file);
+    let file = await stc.getFileByPath(config.file);
     file.setContent(config.content);
     return file.getAst();
   }
