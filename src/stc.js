@@ -77,7 +77,7 @@ export default class STC {
       throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
     }
     
-    file = await this.getFileInWorker(file);
+    file = await this.getFileByPath(file);
     let instance = new PluginInvoke(opts.plugin, file, {
       stc: this,
       options: opts.options,
@@ -113,12 +113,6 @@ export default class STC {
     if(isMaster){
       return this.resource.getFileByPath(filepath);
     }
-
-  }
-  /**
-   * get file in worker
-   */
-  async getFileInWorker(filepath){
     let file = this.resource.getFileByPath(filepath);
     if(file){
       return file;
