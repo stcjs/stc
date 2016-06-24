@@ -37,7 +37,7 @@ export default class Task {
       return;
     }
     let pluginName = PluginInvoke.getPluginClass(pluginOptions.plugin).name;
-    let consoleFiles = this.stc.resource.getConsoleFiles(files);
+    let consoleFiles = JSON.stringify(files.map(file => file.path));
     pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
     let startTime = Date.now();
     let ret = await PluginInvoke.runAll(pluginOptions.plugin, files, {

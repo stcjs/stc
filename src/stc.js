@@ -5,9 +5,14 @@ import PluginInvoke from 'stc-plugin-invoke';
 import StcCache from 'stc-cache';
 import {TokenType} from 'flkit';
 import StcLog from 'stc-log';
+import {isMaster} from 'cluster';
 
 import {parse, stringify} from './ast.js';
 import Resource from './resource.js';
+import {
+  master as masterHandles,
+  worker as workerHandles
+} from './cluster_handle.js';
 
 const clusterLog = debug('cluster');
 const pluginFileTime = debug('pluginFileTime');
@@ -62,23 +67,20 @@ export default class STC {
   async workerHandle(config){
     let {type, pluginIndex, file} = config;
     
-    //get file ast
-    if(type === 'getAst'){
-      file = await this.getFileInWorker(file);
-      file.setContent(config.content);
-      return file.getAst();
+    if(workerHandles[type]){
+      return workerHandles[type](config, this);
     }
     
     //invoke plugin
-    let plugin = this.config[type][pluginIndex];
-    if(!plugin){
+    let opts = this.config[type][pluginIndex];
+    if(!opts){
       throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
     }
     
     file = await this.getFileInWorker(file);
-    let instance = new PluginInvoke(plugin.plugin, file, {
+    let instance = new PluginInvoke(opts.plugin, file, {
       stc: this,
-      options: plugin.options,
+      options: opts.options,
       logger: pluginFileTime,
       ext: {
         type,
@@ -92,15 +94,26 @@ export default class STC {
    */
   masterHandle(config){
     let {method, args, options, file} = config;
-    file = this.resource.getFileByPath(file);
-    if(method === 'getFileByPath'){
-      return file.pathHistory;
+
+    if(masterHandles[method]){
+      return masterHandles[method](config, this);
     }
+
+    file = this.resource.getFileByPath(file);
     let instance = new PluginInvoke(StcPlugin, file, {
       stc: this,
       options: options
     });
     return instance.invokePluginMethod(method, args);
+  }
+  /**
+   * get file by path
+   */
+  async getFileByPath(filepath){
+    if(isMaster){
+      return this.resource.getFileByPath(filepath);
+    }
+
   }
   /**
    * get file in worker

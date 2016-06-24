@@ -17,12 +17,12 @@ export default class Resource {
   constructor(config = {}, astHandle){
     this.config = config;
     this.astHandle = astHandle;
-    this.files = this.getInitFiles();
+    this.files = this._getInitFiles();
   }
   /**
    * get init contain files
    */
-  getInitFiles(){
+  _getInitFiles(){
     let files = [];
     let {include, exclude, defaultExclude} = this.config;
     if(!isArray(include)){
@@ -78,49 +78,6 @@ export default class Resource {
     });
   }
   /**
-   * check file is template file
-   */
-  isTpl(extname){
-    if(extname.indexOf('.') > -1){
-      extname = path.extname(extname).slice(1);
-    }
-    let exts = this.config.tpl.extname;
-    if(!isArray(exts)){
-      exts = [exts];
-    }
-    return exts.indexOf(extname.toLowerCase()) > -1;
-  }
-  /**
-   * get file by path
-   */
-  getFileByPath(filepath){
-    //is already stc-file instance
-    if(!isString(filepath) && filepath.path){
-      return filepath;
-    }
-    let file;
-    this.files.some(item => {
-      if(item.isPath(filepath)){
-        file = item;
-        return true;
-      }
-    });
-    return file;
-  }
-  /**
-   * get file by path history
-   */
-  getFileByPathHistory(pathHistory){
-    let file;
-    this.files.some(item => {
-      if(pathHistory.indexOf(item.path) > -1){
-        file = item;
-        return true;
-      }
-    });
-    return file;
-  }
-  /**
    * get files
    */
   getFiles(include = [], exclude = []){
@@ -135,11 +92,20 @@ export default class Resource {
     return files;
   }
   /**
-   * get console files
+   * check file is template file
    */
-  getConsoleFiles(files = this.files){
-    let consoleFiles = files.map(file => file.path);
-    return JSON.stringify(consoleFiles);
+  isTpl(extname){
+    if(extname.indexOf('.') > -1){
+      extname = path.extname(extname).slice(1);
+    }
+    if(extname === 'html'){
+      return true;
+    }
+    let exts = this.config.tpl.extname;
+    if(!isArray(exts)){
+      exts = [exts];
+    }
+    return exts.indexOf(extname.toLowerCase()) > -1;
   }
   /**
    * add file
@@ -147,7 +113,7 @@ export default class Resource {
   addFile(filepath, content){
     let file;
     this.files.some(item => {
-      if(item.path === filepath){
+      if(item.isPath(filepath)){
         file = item;
         return true;
       }
@@ -172,9 +138,50 @@ export default class Resource {
     return instance;
   }
   /**
+   * get file by path
+   */
+  getFileByPath(filepath, parentFile){
+    //is already stc-file instance
+    if(!isString(filepath) && filepath.path){
+      return filepath;
+    }
+    if(isArray(filepath)){
+      return this._getFileByPathHistory(filepath);
+    }
+    let file;
+    this.files.some(item => {
+      if(item.isPath(filepath)){
+        file = item;
+        return true;
+      }
+    });
+    if(file){
+      return file;
+    }
+    if(parentFile){
+      return this._lookFile(filepath, parentFile);
+    }
+    if(!file){
+      throw new Error('can not find file ' + filepath);
+    }
+  }
+  /**
+   * get file by path history
+   */
+  _getFileByPathHistory(pathHistory){
+    let file;
+    this.files.some(item => {
+      if(pathHistory.indexOf(item.path) > -1){
+        file = item;
+        return true;
+      }
+    });
+    return file;
+  }
+  /**
    * look file with linkpath
    */
-  lookFile(linkpath, parentFile){
+  _lookFile(linkpath, parentFile){
     if(lookFileCache[linkpath]){
       return lookFileCache[linkpath];
     }
