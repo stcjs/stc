@@ -3,12 +3,17 @@ import StcCluster from 'stc-cluster';
 import StcPlugin from 'stc-plugin';
 import PluginInvoke from 'stc-plugin-invoke';
 import StcCache from 'stc-cache';
-import {TokenType} from 'flkit';
 import StcLog from 'stc-log';
 import {isMaster} from 'cluster';
 
 import {parse, stringify} from './ast.js';
 import Resource from './resource.js';
+
+import {
+  TokenType,
+  createToken
+} from 'flkit';
+
 import {
   master as masterHandles,
   worker as workerHandles
@@ -31,7 +36,11 @@ export default class STC {
     this.cache = StcCache;
     //store all cache instances
     this.cacheInstances = {};
-    this.TokenType = TokenType;
+    // flkit
+    this.flkit = {
+      TokenType,
+      createToken
+    };
     this.log = new StcLog();
   }
   /**
