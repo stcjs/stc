@@ -6,7 +6,7 @@ import {
   cssToken2Text
 } from 'flkit';
 
-import {isArray} from 'stc-helper';
+import {isArray, extend} from 'stc-helper';
 
 //babylon can not use import
 let babylon = null;
@@ -30,11 +30,9 @@ const getAttrValue = (attrs, name) => {
  * parse content
  */
 const parseContent = (parser, content, config, options = {}) => {
-  let instance = new parser(content, {
-    tpl: config.engine,
-    ld: config.ld,
-    rd: config.rd
-  });
+  config = extend({}, config);
+  config.tpl = config.engine;
+  let instance = new parser(content, config);
   if(config.adapter){
     instance.registerTpl(config.engine, config.adapter);
   }
@@ -49,19 +47,22 @@ const parseContent = (parser, content, config, options = {}) => {
  * parse html
  */
 const parseHtml = (content, config, options) => {
-  let tokens = parseContent(HtmlTokenize, content, config.tpl, options);
+  let opts = extend({}, config.tpl);
+  opts.jsTplTypes = config.jsTpl && config.jsTpl.type;
+  let tokens = parseContent(HtmlTokenize, content, opts, options);
   tokens.forEach(token => {
     // tag start
     // parse style in tag
-    if(token.type === TokenType.HTML_TAG_START) {
-      let attrs = token.ext.attrs;
-      let styleValue = getAttrValue(attrs, 'style');
-      if(styleValue){
-        let tokens = parseCss(`*{${styleValue}}`, config, options);
-        tokens = tokens.slice(2, tokens.length - 1);
-        token.ext.styleTokens = tokens;
-      }
-    }
+    // if(token.type === TokenType.HTML_TAG_START) {
+    //   let attrs = token.ext.attrs;
+    //   let styleValue = getAttrValue(attrs, 'style');
+    //   if(styleValue){
+    //     let tokens = parseCss(`*{${styleValue}}`, config, options);
+    //     tokens = tokens.slice(2, tokens.length - 1);
+    //     token.ext.styleTokens = tokens;
+    //   }
+    // }
+
     // style
     if(token.type === TokenType.HTML_TAG_STYLE){
       let contentToken = token.ext.content;
@@ -72,14 +73,13 @@ const parseHtml = (content, config, options) => {
      contentToken.ext.tokens = cssTokens;
      return;
     }
+    
     // js tpl
     if(token.type === TokenType.HTML_TAG_SCRIPT){
       let startToken = token.ext.start;
-      let {type} = startToken.ext;
-      let jsTpl = config.jsTpl;
-      if(type && jsTpl.type.indexOf(type) > -1){
+      if(startToken.ext.isTpl){
         let contentToken = token.ext.content;
-        let htmlTokens = parseHtml(contentToken.value, {tpl: jsTpl}, {
+        let htmlTokens = parseHtml(contentToken.value, {tpl: config.jsTpl}, {
           line: contentToken.loc.start.line,
           col: contentToken.loc.start.col
         });
