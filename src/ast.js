@@ -54,7 +54,7 @@ const parseHtml = (content, config, options) => {
     // tag start
     // parse style in tag
     if(token.type === TokenType.HTML_TAG_START) {
-      let attrs = token.detail.attrs;
+      let attrs = token.ext.attrs;
       let styleValue = getAttrValue(attrs, 'style');
       if(styleValue){
         let tokens = parseCss(`*{${styleValue}}`, config, options);

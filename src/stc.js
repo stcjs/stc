@@ -9,10 +9,7 @@ import {isMaster} from 'cluster';
 import {parse, stringify} from './ast.js';
 import Resource from './resource.js';
 
-import {
-  TokenType,
-  createToken
-} from 'flkit';
+import * as flkit from 'flkit';
 
 import {
   master as masterHandles,
@@ -37,10 +34,7 @@ export default class STC {
     //store all cache instances
     this.cacheInstances = {};
     // flkit
-    this.flkit = {
-      TokenType,
-      createToken
-    };
+    this.flkit = flkit;
     this.log = new StcLog();
   }
   /**
