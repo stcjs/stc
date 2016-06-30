@@ -111,23 +111,30 @@ export default class Resource {
   /**
    * create file
    */
-  createFile(filepath, content){
+  createFile(filepath, content, virtual){
     let instance = new stcFile({
       path: filepath,
       astHandle: this.astHandle
     });
+    if(content === true){
+      virtual = true;
+      content = undefined;
+    }
     if(content !== undefined){
       instance.setContent(content);
     }
     if(this.isTpl(filepath)){
       instance.prop('tpl', true);
     }
+    if(virtual){
+      instance.prop('virtual', true);
+    }
     return instance;
   }
   /**
    * add file
    */
-  addFile(filepath, content){
+  addFile(filepath, content, virtual){
     let file;
     this.files.some(item => {
       if(item.isPath(filepath)){
@@ -141,7 +148,7 @@ export default class Resource {
       }
       return file;
     }
-    let instance = this.createFile(filepath, content);
+    let instance = this.createFile(filepath, content, virtual);
     this.files.push(instance);
     return instance;
   }
