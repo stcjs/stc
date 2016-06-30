@@ -67,34 +67,6 @@ export default class STC {
     return instance;
   }
   /**
-   * invoked in worker
-   */
-  async workerHandle(config){
-    let {type, pluginIndex, file} = config;
-    
-    if(workerHandles[type]){
-      return workerHandles[type](config, this);
-    }
-    
-    //invoke plugin
-    let opts = this.config[type][pluginIndex];
-    if(!opts){
-      throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
-    }
-    
-    file = await this.getFileByPath(file);
-    let instance = new PluginInvoke(opts.plugin, file, {
-      stc: this,
-      options: opts.options,
-      logger: pluginFileTime,
-      ext: {
-        type,
-        pluginIndex
-      }
-    });
-    return instance.run();
-  }
-  /**
    * invoked in master
    */
   masterHandle(config){
@@ -112,21 +84,31 @@ export default class STC {
     return instance.invokePluginMethod(method, args);
   }
   /**
-   * get file by path
+   * invoked in worker
    */
-  async getFileByPath(filepath){
-    if(isMaster){
-      return this.resource.getFileByPath(filepath);
+  workerHandle(config){
+    let {type, pluginIndex, file} = config;
+    
+    if(workerHandles[type]){
+      return workerHandles[type](config, this);
     }
-    let file = this.resource.getFileByPath(filepath);
-    if(file){
-      return file;
+    
+    //invoke plugin
+    let opts = this.config[type][pluginIndex];
+    if(!opts){
+      throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
     }
-    let pathHistory = await this.cluster.workerInvoke({
-      method: 'getFileByPath',
-      file: filepath
+    
+    file = this.resource.createFile(file);
+    let instance = new PluginInvoke(opts.plugin, file, {
+      stc: this,
+      options: opts.options,
+      logger: pluginFileTime,
+      ext: {
+        type,
+        pluginIndex
+      }
     });
-    file = this.resource.getFileByPathHistory(pathHistory);
-    return file;
+    return instance.run();
   }
 }

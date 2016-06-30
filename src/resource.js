@@ -1,6 +1,7 @@
 import {getFiles, isArray, isRegExp, isObject, isString} from 'stc-helper';
 import stcFile from 'stc-file';
 import path from 'path';
+import {isMaster} from 'cluster';
 
 /**
  * look file cache
@@ -17,7 +18,7 @@ export default class Resource {
   constructor(config = {}, astHandle){
     this.config = config;
     this.astHandle = astHandle;
-    this.files = this._getInitFiles();
+    this.files = isMaster ? this._getInitFiles() : [];
   }
   /**
    * get init contain files
@@ -108,6 +109,22 @@ export default class Resource {
     return exts.indexOf(extname.toLowerCase()) > -1;
   }
   /**
+   * create file
+   */
+  createFile(filepath, content){
+    let instance = new stcFile({
+      path: filepath,
+      astHandle: this.astHandle
+    });
+    if(content !== undefined){
+      instance.setContent(content);
+    }
+    if(this.isTpl(filepath)){
+      instance.prop('tpl', true);
+    }
+    return instance;
+  }
+  /**
    * add file
    */
   addFile(filepath, content){
@@ -119,21 +136,12 @@ export default class Resource {
       }
     });
     if(file){
-      if(content){
+      if(content !== undefined){
         file.setContent(content);
       }
       return file;
     }
-    let instance = new stcFile({
-      path: filepath,
-      astHandle: this.astHandle
-    });
-    if(content){
-      instance.setContent(content);
-    }
-    if(this.isTpl(filepath)){
-      instance.prop('tpl', true);
-    }
+    let instance = this.createFile(filepath, content);
     this.files.push(instance);
     return instance;
   }

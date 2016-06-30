@@ -31,7 +31,7 @@ export const master = {
    * get file promise key & value
    */
   getFilePromise: async (config, stc) => {
-    let file = await stc.getFileByPath(config.file);
+    let file = await stc.resource.getFileByPath(config.file);
     let data = file.promise(config.key);
     if(config.deferred){
       file.promise(config.key, undefined, 'set');
@@ -42,8 +42,14 @@ export const master = {
    * resolve file deferred
    */
   resolveFilePromise: async (config, stc) => {
-    let file = await stc.getFileByPath(config.file);
+    let file = await stc.resource.getFileByPath(config.file);
     file.promise(config.key, config.value, 'update');
+  },
+  /**
+   * add file
+   */
+  addFile: (config, stc) => {
+    stc.resource.addFile(config.file, config.content);
   }
 };
 
@@ -52,8 +58,7 @@ export const worker = {
    * get file ast
    */
   getAst: async (config, stc) => {
-    let file = await stc.getFileByPath(config.file);
-    file.setContent(config.content);
+    let file = stc.resource.createFile(config.file, config.content);
     return file.getAst();
   }
 };
