@@ -83,6 +83,9 @@ export default class Resource {
    */
   getFiles(include = [], exclude = []){
     let files = this.files.filter(item => {
+      if(item.prop('virtual')){
+        return false;
+      }
       if(this.match(item, include) && !this.match(item, exclude)){
         return true;
       }
