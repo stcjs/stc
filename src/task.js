@@ -90,6 +90,10 @@ export default class Task {
     let outputPath = this.config.outputPath;
     let files = this.stc.resource.files;
     let promises = files.map(async (file) => {
+      // ignore virtual file
+      if(file.prop('virtual')){
+        return;
+      }
       let savePath = path.join(outputPath, file.path);
       mkdir(path.dirname(savePath));
       let content = await file.getContent();

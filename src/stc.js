@@ -31,7 +31,7 @@ export default class STC {
     this.resource = this.getResourceInstance();
     this.cluster = this.getClusterInstance();
     this.cache = StcCache;
-    //store all cache instances
+    // store all cache instances
     this.cacheInstances = {};
     // flkit
     this.flkit = flkit;

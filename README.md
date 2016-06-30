@@ -30,9 +30,9 @@
 * [ ] CSS 自动补前缀
 * [ ] CSS Sprite
 * [ ] 图片优化 
-* [ ] HTML 压缩
+* [ ] [HTML 压缩](https://github.com/stcjs/stc-html-compress)
 * [ ] JS 模块化合并
-* [ ] 外联资源转为内联资源，小图片转为 base64
+* [ ] [外联资源转为内联资源，小图片转为 base64](https://github.com/stcjs/stc-inline)
 * [ ] 静态资源版本号 
 * [ ] [代码替换功能](https://github.com/stcjs/stc-replace)
 * [ ] 模板 XSS 自动修复功能
