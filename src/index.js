@@ -3,7 +3,6 @@
 require('babel-runtime/core-js/promise').default = require('bluebird');
 global.Promise = require('bluebird');
 
-
 import {isObject, extend} from 'stc-helper';
 
 import Config from './config.js';

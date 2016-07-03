@@ -31,7 +31,7 @@ export default class {
       jsTpl: {
         type: ['text/html', 'text/template'],
         engine: '',
-        adapter: '',
+        adapter: undefined,
         ld: '',
         rd: ''
       },

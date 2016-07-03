@@ -35,7 +35,22 @@ export default class STC {
     this.cacheInstances = {};
     // flkit
     this.flkit = flkit;
+    this.flkit.getFlkitInstance = this.getFlkitInstance.bind(this);
     this.log = new StcLog();
+  }
+  /**
+   * get flkit instance
+   */
+  getFlkitInstance(type, text, options = {}){
+    if(options.engine && !options.tpl){
+      options.tpl = options.engine;
+    }
+    let cls = this.flkit[type];
+    let instance = new cls(text, options);
+    if(options.adapter){
+      instance.registerTpl(options.adapter);
+    }
+    return instance;
   }
   /**
    * get cluster instance

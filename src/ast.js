@@ -73,7 +73,7 @@ const parseHtml = (content, config, options) => {
      contentToken.ext.tokens = cssTokens;
      return;
     }
-    
+
     // js tpl
     if(token.type === TokenType.HTML_TAG_SCRIPT){
       let startToken = token.ext.start;
@@ -94,6 +94,8 @@ const parseHtml = (content, config, options) => {
  * parse css
  */
 const parseCss = (content, config, options) => {
+  config = {...config};
+  config.parseSelector = true;
   return parseContent(CssTokenize, content, config, options);
 };
 
