@@ -18,12 +18,12 @@
 * [x] [stc-babel](https://github.com/stcjs/stc-babel) - 使用 Babel 编译 ES2015+ 特性的文件
 * [x] [stc-eslint](https://github.com/stcjs/stc-eslint) - 使用 ESLint 检查 JavaScript 代码规范
 * [x] [stc-html-compress](https://github.com/stcjs/stc-html-compress) - 压缩模板文件，支持模板语法
+* [x] [stc-css-compress](https://github.com/stcjs/stc-css-compress) - 压缩 CSS 文件，支持模板语法
 
 ## 需要开发的插件
 
 
 * [ ] [CSS 合并（@import url）](https://github.com/stcjs/stc-css-combine)
-* [ ] CSS 压缩
 * [ ] JS 合并（document.write）
 * [ ] LocalStorage
 * [ ] CDN
