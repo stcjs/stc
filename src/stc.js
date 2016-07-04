@@ -37,6 +37,7 @@ export default class STC {
     this.flkit = flkit;
     this.flkit.getFlkitInstance = this.getFlkitInstance.bind(this);
     this.log = new StcLog();
+    this.debug = debug;
   }
   /**
    * get flkit instance

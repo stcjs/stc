@@ -7,9 +7,9 @@ import {mkdir, promisify} from 'stc-helper';
 
 import STC from './stc.js';
 
-const pluginFilesLog = debug('pluginFiles');
+const pluginFilesLog = debug('pluginMatchedFiles');
 const pluginFileTime = debug('pluginFileTime');
-const pluginTime = debug('pluginTime');
+const pluginTime = debug('pluginTotalTime');
 
 /**
  * Task class
