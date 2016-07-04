@@ -49,10 +49,12 @@ export const master = {
    * add file
    */
   addFile: (config, stc) => {
-    stc.resource.addFile(config.file, config.content);
+    stc.resource.addFile(config.file, config.content, config.virtual);
   }
 };
-
+/**
+ * special handle in worker
+ */
 export const worker = {
   /**
    * get file ast
