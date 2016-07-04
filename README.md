@@ -37,6 +37,8 @@
 * [ ] [代码替换功能](https://github.com/stcjs/stc-replace)
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
+* [ ] sass 转译为 CSS
+* [ ] less 转译为 CSS
 
 ## 如何开发
 
