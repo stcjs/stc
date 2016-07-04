@@ -23,6 +23,26 @@ export default class Task {
     this.stc = new STC(config);
   }
   /**
+   * get include and exclude
+   */
+  getIncludeAndExclude(pluginOptions){
+    let {include, exclude} = pluginOptions;
+    let pluginClass = PluginInvoke.getPluginClass(pluginOptions.plugin);
+    if(!include){
+      include = pluginClass.include;
+      if(typeof include === 'function'){
+        include = include();
+      }
+    }
+    if(!exclude){
+      exclude = pluginClass.exclude;
+      if(typeof exclude === 'function'){
+        exclude = exclude();
+      }
+    }
+    return {include, exclude};
+  }
+  /**
    * run plugin task
    */
   async runPluginTask(pluginOptions, ext){
@@ -30,17 +50,18 @@ export default class Task {
     if(pluginOptions.on === false){
       return;
     }
-    let {include, exclude} = pluginOptions;
+    let pluginClass = PluginInvoke.getPluginClass(pluginOptions.plugin);
+    let {include, exclude} = this.getIncludeAndExclude(pluginOptions);
     //no files matched
     let files = this.stc.resource.getFiles(include, exclude);
     if(!files.length){
       return;
     }
-    let pluginName = PluginInvoke.getPluginClass(pluginOptions.plugin).name;
+    let pluginName = pluginClass.name;
     let consoleFiles = JSON.stringify(files.map(file => file.path));
     pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
     let startTime = Date.now();
-    let ret = await PluginInvoke.runAll(pluginOptions.plugin, files, {
+    let ret = await PluginInvoke.runAll(pluginClass, files, {
       stc: this.stc,
       options: pluginOptions.options,
       logger: pluginFileTime,

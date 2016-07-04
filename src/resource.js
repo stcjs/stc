@@ -27,7 +27,7 @@ export default class Resource {
     let files = [];
     let {include, exclude, defaultExclude} = this.config;
     if(!isArray(include)){
-      include = [include];
+      include = include ? [include] : [];
     }
     include.forEach(itemPath => {
       if(!itemPath){
