@@ -50,6 +50,22 @@ export const master = {
    */
   addFile: (config, stc) => {
     stc.resource.addFile(config.file, config.content, config.virtual);
+  },
+  /**
+   * return ast if have
+   */
+  getAst: (config, stc) => {
+    let file = stc.resource.getFileByPath(config.file);
+    if(file.hasAst()){
+      return file.getAst();
+    }
+  },
+  /**
+   * update file ast
+   */
+  updateAst: (config, stc) => {
+    let file = stc.resource.getFileByPath(config.file);
+    file.setAst(config.ast);
   }
 };
 /**
