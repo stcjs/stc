@@ -9,6 +9,124 @@ import {isMaster} from 'cluster';
 let lookFileCache = {};
 
 /**
+ * get init files
+ */
+const getInitFiles = instance => {
+  let files = [];
+  let {include, exclude, defaultExclude} = instance.config;
+  if(!isArray(include)){
+    include = include ? [include] : [];
+  }
+  include.forEach(itemPath => {
+    if(itemPath){
+      let tFiles = getFiles(itemPath, itemPath);
+      files = files.concat(tFiles);
+    }
+  });
+  return files.filter(item => {
+    return !instance.match(item, defaultExclude) && !instance.match(item, exclude);
+  }).map(item => {
+    let file = new stcFile({
+      path: item,
+      astHandle: instance.astHandle
+    });
+    if(instance.isTpl(item)){
+      file.prop('tpl', true);
+    }
+    return file;
+  }).sort((a, b) => {
+    return a.path.split(path.sep).length > b.path.split(path.sep).length ? -1 : 1;
+  });
+};
+
+/**
+ * update file property
+ */
+const updateFile = (file, content, virtual) => {
+  if(content === true){
+    virtual = true;
+    content = undefined;
+  }
+  if(content !== undefined){
+    if(isString(content) || isBuffer(content)){
+      file.setContent(content);
+    }else{
+      file.setAst(content);
+    }
+  }
+  if(virtual){
+    file.prop('virtual', true);
+  }
+  return file;
+};
+
+/**
+ * get file by path
+ */
+const getFileByPath = (instance, filepath) => {
+  let file;
+  instance.files.some(item => {
+    if(item.isPath(filepath)){
+      return (file = item);
+    }
+  });
+  if(file){
+    lookFileCache[filepath] = file;
+    return file;
+  }
+};
+
+/**
+ * get file by path handle 
+ */
+const getFileByPathHandle = (instance, linkpath) => {
+  let filepath = instance.config.pathHandle(linkpath);
+  if(filepath){
+    let file;
+    instance.files.some(item => {
+      if(item.isPath(filepath) > -1){
+        return (file = item);
+      }
+    });
+    if(file){
+      lookFileCache[linkpath] = file;
+      return file;
+    }
+  }
+}
+/**
+ * search File
+ */
+const searchFile = (instance, linkpath) => {
+  // linkpath is longer than filepath
+  let file;
+  instance.files.some(item => {
+    let pathHistory = item.pathHistory, length = pathHistory.length;
+    for(let i = 0; i < length; i++){
+      let pos = pathHistory[i].indexOf(linkpath);
+      if(pos > -1 && pathHistory[i].slice(pos) === linkpath){
+        file = item;
+        return true;
+      }
+    }
+  });
+  if(file){
+    lookFileCache[linkpath] = file;
+    return file;
+  }
+}
+
+/**
+ * look file
+ */
+const lookFile = (instance, linkpath, parentFile) => {
+  if(instance.config.pathHandle){
+    return getFileByPathHandle(instance, linkpath, parentFile);
+  }
+  return searchFile(instance, linkpath);
+}
+
+/**
  * resource manage
  */
 export default class Resource {
@@ -18,36 +136,7 @@ export default class Resource {
   constructor(config = {}, astHandle){
     this.config = config;
     this.astHandle = astHandle;
-    this.files = isMaster ? this._getInitFiles() : [];
-  }
-  /**
-   * get init contain files
-   */
-  _getInitFiles(){
-    let files = [];
-    let {include, exclude, defaultExclude} = this.config;
-    if(!isArray(include)){
-      include = include ? [include] : [];
-    }
-    include.forEach(itemPath => {
-      if(!itemPath){
-        return;
-      }
-      let tFiles = getFiles(itemPath, itemPath);
-      files = files.concat(tFiles);
-    });
-    return files.filter(item => {
-      return !this.match(item, defaultExclude) && !this.match(item, exclude);
-    }).map(item => {
-      let instance = new stcFile({
-        path: item,
-        astHandle: this.astHandle
-      });
-      if(this.isTpl(item)){
-        instance.prop('tpl', true);
-      }
-      return instance;
-    });
+    this.files = isMaster ? getInitFiles(this) : [];
   }
   /**
    * test file match pattern
@@ -82,18 +171,14 @@ export default class Resource {
    * get files
    */
   getFiles(include = [], exclude = []){
-    let files = this.files.filter(item => {
+    return this.files.filter(item => {
       if(item.prop('virtual')){
         return false;
       }
       if(this.match(item, include) && !this.match(item, exclude)){
         return true;
       }
-    }).sort((a, b) => {
-      //sort with file size
-      return a.stat.size > b.stat.size ? 1 : -1;
     });
-    return files;
   }
   /**
    * check file is template file
@@ -115,28 +200,17 @@ export default class Resource {
    * create file
    */
   createFile(filepath, content, virtual){
+    if(filepath[0] === '/'){
+      filepath = filepath.slice(1);
+    }
     let instance = new stcFile({
       path: filepath,
       astHandle: this.astHandle
     });
-    if(content === true){
-      virtual = true;
-      content = undefined;
-    }
-    if(content !== undefined){
-      if(isString(content) || isBuffer(content)){
-        instance.setContent(content);
-      }else{
-        instance.setAst(content);
-      }
-    }
     if(this.isTpl(filepath)){
       instance.prop('tpl', true);
     }
-    if(virtual){
-      instance.prop('virtual', true);
-    }
-    return instance;
+    return updateFile(instance, content, virtual);
   }
   /**
    * add file
@@ -150,14 +224,7 @@ export default class Resource {
       }
     });
     if(file){
-      if(content !== undefined){
-        if(isString(content) || isBuffer(content)){
-          file.setContent(content);
-        }else{
-          file.setAst(content);
-        }
-      }
-      return file;
+      return updateFile(file, content, virtual);
     }
     let instance = this.createFile(filepath, content, virtual);
     this.files.push(instance);
@@ -171,85 +238,23 @@ export default class Resource {
     if(!isString(filepath) && filepath.path){
       return filepath;
     }
-    if(isArray(filepath)){
-      return this._getFileByPathHistory(filepath);
+    if(filepath[0] === '/'){
+      filepath = filepath.slice(1);
     }
-    let file;
-    this.files.some(item => {
-      if(item.isPath(filepath)){
-        file = item;
-        return true;
-      }
-    });
+    if(lookFileCache[filepath]){
+      return lookFileCache[filepath];
+    }
+    let file = getFileByPath(this, filepath);
+    if(!file && parentFile){
+      file = lookFile(this, filepath, parentFile);
+    }
     if(file){
       return file;
     }
+    let message = `can not find file \`${filepath}\``;
     if(parentFile){
-      return this._lookFile(filepath, parentFile);
+      message += ` in \`${parentFile}\``;
     }
-    if(!file){
-      throw new Error('can not find file ' + filepath);
-    }
-  }
-  /**
-   * get file by path history
-   */
-  _getFileByPathHistory(pathHistory){
-    let file;
-    this.files.some(item => {
-      if(pathHistory.indexOf(item.path) > -1){
-        file = item;
-        return true;
-      }
-    });
-    return file;
-  }
-  /**
-   * look file with linkpath
-   */
-  _lookFile(linkpath, parentFile){
-    if(lookFileCache[linkpath]){
-      return lookFileCache[linkpath];
-    }
-
-    let filepath;
-    if(this.config.pathHandle){
-      filepath = this.config.pathHandle(linkpath);
-      if(filepath){
-        let file;
-        this.files.some(item => {
-          if(item.pathHistory.indexOf(filepath) > -1){
-            file = item;
-            return true;
-          }
-        });
-        if(file){
-          lookFileCache[linkpath] = file;
-          return file;
-        }
-      }
-    }else{
-      let loop = 0;
-      let linkpaths = linkpath.split('/');
-      let file;
-      while(loop++ < 5 && linkpaths.length){
-        let currentpath = linkpaths.join('/');
-        this.files.some(item => {
-          if(item.pathHistory.indexOf(currentpath) > -1){
-            file = item;
-            return true;
-          }
-        });
-        if(file){
-          break;
-        }
-        linkpaths.shift();
-      }
-      if(file){
-        lookFileCache[linkpath] = file;
-        return file;
-      }
-    }
-    throw new Error('can not find resource `' + linkpath + '` in file `' + parentFile + '`');
+    throw new Error(message);
   }
 }
