@@ -1,4 +1,4 @@
-import {getFiles, isArray, isRegExp, isObject, isString} from 'stc-helper';
+import {getFiles, isArray, isRegExp, isObject, isString, isBuffer} from 'stc-helper';
 import stcFile from 'stc-file';
 import path from 'path';
 import {isMaster} from 'cluster';
@@ -124,7 +124,11 @@ export default class Resource {
       content = undefined;
     }
     if(content !== undefined){
-      instance.setContent(content);
+      if(isString(content) || isBuffer(content)){
+        instance.setContent(content);
+      }else{
+        instance.setAst(content);
+      }
     }
     if(this.isTpl(filepath)){
       instance.prop('tpl', true);
@@ -147,7 +151,11 @@ export default class Resource {
     });
     if(file){
       if(content !== undefined){
-        file.setContent(content);
+        if(isString(content) || isBuffer(content)){
+          file.setContent(content);
+        }else{
+          file.setAst(content);
+        }
       }
       return file;
     }
