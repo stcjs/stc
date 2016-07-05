@@ -75,7 +75,7 @@ export const worker = {
   /**
    * get file ast
    */
-  getAst: async (config, stc) => {
+  getAst: (config, stc) => {
     let file = stc.resource.createFile(config.file, config.content);
     return file.getAst();
   }
