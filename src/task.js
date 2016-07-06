@@ -45,7 +45,7 @@ export default class Task {
   /**
    * run plugin task
    */
-  async runPluginTask(pluginOptions, ext){
+  async runPlugin(pluginOptions, ext){
     //turn off plugin
     if(pluginOptions.on === false){
       return;
@@ -57,9 +57,11 @@ export default class Task {
     if(!files.length){
       return;
     }
+    
     let pluginName = pluginClass.name;
     let consoleFiles = JSON.stringify(files.map(file => file.path));
     pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
+
     let startTime = Date.now();
     let ret = await PluginInvoke.runAll(pluginClass, files, {
       stc: this.stc,
@@ -67,8 +69,8 @@ export default class Task {
       logger: pluginFileTime,
       ext
     });
+
     let endTime = Date.now();
-    
     pluginTime(`${pluginName}: files=${files.length}, time=${endTime - startTime}ms`);
     return ret;
   }
@@ -81,7 +83,7 @@ export default class Task {
       return;
     }
     let promises = config.map((item, pluginIndex) => {
-      return this.runPluginTask(item, {
+      return this.runPlugin(item, {
         type,
         pluginIndex
       });
@@ -98,7 +100,7 @@ export default class Task {
     }
     let length = config.length;
     for(let i = 0; i < length; i++){
-      await this.runPluginTask(config[i], {
+      await this.runPlugin(config[i], {
         type,
         pluginIndex: i
       });

@@ -30,19 +30,22 @@ export const master = {
   /**
    * get file promise key & value
    */
-  getFilePromise: async (config, stc) => {
-    let file = await stc.resource.getFileByPath(config.file);
-    let data = file.promise(config.key);
+  getFilePromise: (config, stc) => {
+    let file = stc.resource.getFileByPath(config.file);
+    let ret = file.promise(config.key);
+    if(ret !== undefined){
+      return ret;
+    }
     if(config.deferred){
       file.promise(config.key, undefined, 'set');
     }
-    return data;
+    return ret;
   },
   /**
    * resolve file deferred
    */
-  resolveFilePromise: async (config, stc) => {
-    let file = await stc.resource.getFileByPath(config.file);
+  resolveFilePromise: (config, stc) => {
+    let file = stc.resource.getFileByPath(config.file);
     file.promise(config.key, config.value, 'update');
   },
   /**
