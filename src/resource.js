@@ -119,9 +119,9 @@ const searchFile = (instance, linkpath) => {
 /**
  * look file
  */
-const lookFile = (instance, linkpath, parentFile) => {
+const lookFile = (instance, linkpath) => {
   if(instance.config.pathHandle){
-    return getFileByPathHandle(instance, linkpath, parentFile);
+    return getFileByPathHandle(instance, linkpath);
   }
   return searchFile(instance, linkpath);
 }
@@ -245,8 +245,8 @@ export default class Resource {
       return lookFileCache[filepath];
     }
     let file = getFileByPath(this, filepath);
-    if(!file && parentFile){
-      file = lookFile(this, filepath, parentFile);
+    if(!file){
+      file = lookFile(this, filepath);
     }
     if(file){
       return file;

@@ -112,7 +112,7 @@ export default class STC {
     //invoke plugin
     let opts = this.config[type][pluginIndex];
     if(!opts){
-      throw new Error(`plugin not found type: ${type}, pluginIndex: ${pluginIndex}`);
+      throw new Error(`plugin not found, type: ${type}, pluginIndex: ${pluginIndex}`);
     }
     
     file = this.resource.createFile(file);
