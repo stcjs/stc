@@ -11,6 +11,34 @@
 * 分析依赖树
 * 无感知的缓存策略
 
+## 工作流处理步骤
+
+* lint - 代码规范检查，如：用 eslint 检查 JS 代码
+* transpile - 转译，将非标准的 HTML/JS/CSS 转换为标准的文件，如： TypeScript，Less，Sass
+* dependence - 依赖分析，workflow 里只处理被依赖的文件，提高编译性能
+* workflow - 内容替换等处理，如：压缩，上 CDN
+
+## 配置文件示例
+
+```js
+// stc.config.js
+
+var stc = require('stc');
+var uglify = require('stc-uglify');
+var eslint = require('stc-eslint');
+
+stc.lint({
+    eslint: {plugin: eslint, include: /\.js$/, options: {}}
+});
+
+stc.workflow({
+    uglify: {plugin: uglify, include: /\.js$/, options: {}}
+});
+
+stc.start(); // 启动工作流程
+
+```
+
 ## 已有插件
 
 * [x] [stc-uglify](https://github.com/stcjs/stc-uglify) - 使用 UglifyJS 压缩 JavaScript
