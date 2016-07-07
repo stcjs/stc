@@ -20,7 +20,7 @@
 * [x] [stc-html-compress](https://github.com/stcjs/stc-html-compress) - 压缩模板文件，支持模板语法
 * [x] [stc-css-compress](https://github.com/stcjs/stc-css-compress) - 压缩 CSS 文件，支持模板语法
 * [x] [stc-js-combine](https://github.com/stcjs/stc-js-combine) - 合并document.write的js文件
-* [x] [stc-cdn](https://github.com/stcjs/stc-js-combine) - 将静态资源上传到 CDN
+* [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
 
 ## 需要开发的插件
 
