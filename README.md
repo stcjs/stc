@@ -19,21 +19,21 @@
 * [x] [stc-eslint](https://github.com/stcjs/stc-eslint) - 使用 ESLint 检查 JavaScript 代码规范
 * [x] [stc-html-compress](https://github.com/stcjs/stc-html-compress) - 压缩模板文件，支持模板语法
 * [x] [stc-css-compress](https://github.com/stcjs/stc-css-compress) - 压缩 CSS 文件，支持模板语法
+* [x] [stc-js-combine](https://github.com/stcjs/stc-js-combine) - 合并document.write的js文件
 
 ## 需要开发的插件
 
 
 * [ ] [CSS 合并（@import url）](https://github.com/stcjs/stc-css-combine)
-* [ ] JS 合并（document.write）
 * [ ] LocalStorage
 * [ ] CDN
 * [ ] 国际化
 * [ ] CSS 自动补前缀
 * [ ] CSS Sprite
-* [ ] 图片优化 
+* [ ] 图片优化
 * [ ] JS 模块化合并
 * [ ] [外联资源转为内联资源，小图片转为 base64](https://github.com/stcjs/stc-inline)
-* [ ] 静态资源版本号 
+* [ ] 静态资源版本号
 * [ ] [代码替换功能](https://github.com/stcjs/stc-replace)
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
