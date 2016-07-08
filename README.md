@@ -51,7 +51,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-css-compress](https://github.com/stcjs/stc-css-compress) - 压缩 CSS 文件，支持模板语法
 * [x] [stc-js-combine](https://github.com/stcjs/stc-js-combine) - 合并document.write的js文件
 * [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
-
+* [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
 ## 需要开发的插件
 
 
@@ -64,7 +64,6 @@ stc.start(); // 启动工作流程
 * [ ] JS 模块化合并
 * [ ] [外联资源转为内联资源，小图片转为 base64](https://github.com/stcjs/stc-inline)
 * [ ] 静态资源版本号
-* [ ] [代码替换功能](https://github.com/stcjs/stc-replace)
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
 * [ ] sass 转译为 CSS
