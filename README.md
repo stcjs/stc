@@ -52,6 +52,8 @@ stc.start(); // 启动工作流程
 * [x] [stc-js-combine](https://github.com/stcjs/stc-js-combine) - 合并document.write的js文件
 * [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
+
+
 ## 需要开发的插件
 
 
