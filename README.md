@@ -46,6 +46,7 @@ stc.start(); // 启动工作流程
 ### lint
 
 * [x] [stc-eslint](https://github.com/stcjs/stc-eslint) - 使用 ESLint 检查 JavaScript 代码规范
+* [x] [ 空文件检测](https://github.com/stcjs/stc-empty-file) - 空文件检测
 
 ### transpile
 
@@ -79,7 +80,6 @@ stc.start(); // 启动工作流程
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
 * [ ] 文件含有 BOM 头检测
-* [ ] 空文件检测 (https://github.com/stcjs/stc-empty-file)
 * [ ] 文件拷贝
 * [ ] CDN 功能上传到阿里云、七牛、又拍云的适配器
 * [ ] Vue.js 代码转译
