@@ -41,7 +41,7 @@ stc.start(); // 启动工作流程
 
 ```
 
-## 已有插件
+## 已经开发完成的插件
 
 ### lint
 
@@ -64,7 +64,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
 
 
-## 需要开发的插件
+## 正在开发的插件
 
 
 * [ ] [CSS 合并（@import url）](https://github.com/stcjs/stc-css-combine)
