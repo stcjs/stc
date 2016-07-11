@@ -64,7 +64,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
 * [x] [stc-imagemin](https://github.com/stcjs/stc-imagemin) - 优化 JPG, PNG 和 GIF 等图片
-
+* [x] [stc-less](https://github.com/stcjs/stc-less) - less 转译为 CSS
 
 ## 正在开发的插件
 
@@ -79,7 +79,6 @@ stc.start(); // 启动工作流程
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
-* [ ] less 转译为 CSS
 * [ ] 文件含有 BOM 头检测
 * [ ] 空文件检测
 * [ ] 文件拷贝
