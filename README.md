@@ -52,6 +52,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-typescript](https://github.com/stcjs/stc-typescript) - 编译 .ts 文件到 JavaScript
 * [x] [stc-babel](https://github.com/stcjs/stc-babel) - 使用 Babel 编译 ES2015+ 特性的文件
 * [x] [stc-sass](https://github.com/stcjs/stc-sass) - 使用 node-sass 编译 sass 文件
+* [x] [stc-less](https://github.com/stcjs/stc-less) - less 转译为 CSS
 
 ### dependence
 
@@ -64,7 +65,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
 * [x] [stc-imagemin](https://github.com/stcjs/stc-imagemin) - 优化 JPG, PNG 和 GIF 等图片
-* [x] [stc-less](https://github.com/stcjs/stc-less) - less 转译为 CSS
+
 
 ## 正在开发的插件
 
