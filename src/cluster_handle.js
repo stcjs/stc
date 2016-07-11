@@ -7,10 +7,10 @@ export const master = {
   /**
    * get file by path
    */
-  getFileByPath: (config, stc) => {
-    let file = stc.resource.getFileByPath(config.file);
-    return file.pathHistory;
-  },
+  // getFileByPath: (config, stc) => {
+  //   let file = stc.resource.getFileByPath(config.file);
+  //   return file.pathHistory;
+  // },
   /**
    * get or set cache
    */
@@ -57,7 +57,7 @@ export const master = {
   /**
    * return ast if have
    */
-  getAst: (config, stc) => {
+  getAstIfExist: (config, stc) => {
     let file = stc.resource.getFileByPath(config.file);
     if(file.hasAst()){
       return file.getAst();
