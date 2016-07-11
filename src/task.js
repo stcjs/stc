@@ -138,6 +138,13 @@ export default class Task {
         await this.serial('workflow');
         await this.output();
       }catch(err){
+        // error message is json data
+        if(err.message[err.message.length - 1] === '}'){
+          try{
+            err = JSON.parse(err.message.slice(err.message.indexOf('{')));
+          }catch(e){}
+        }
+        
         if(err.className){
           this.stc.log.display(err, 'error');
         }else{
