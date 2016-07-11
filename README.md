@@ -63,6 +63,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-js-combine](https://github.com/stcjs/stc-js-combine) - 合并document.write的js文件
 * [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
+* [x] [stc-imagemin](https://github.com/stcjs/stc-imagemin) - 优化 JPG, PNG 和 GIF 等图片
 
 
 ## 正在开发的插件
@@ -73,7 +74,6 @@ stc.start(); // 启动工作流程
 * [ ] 国际化
 * [ ] CSS 自动补前缀
 * [ ] CSS Sprite
-* [ ] 图片优化
 * [ ] JS 模块化合并
 * [ ] [外联资源转为内联资源，小图片转为 base64](https://github.com/stcjs/stc-inline)
 * [ ] 静态资源版本号
