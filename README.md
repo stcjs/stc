@@ -51,6 +51,7 @@ stc.start(); // 启动工作流程
 
 * [x] [stc-typescript](https://github.com/stcjs/stc-typescript) - 编译 .ts 文件到 JavaScript
 * [x] [stc-babel](https://github.com/stcjs/stc-babel) - 使用 Babel 编译 ES2015+ 特性的文件
+* [x] [stc-sass](https://github.com/stcjs/stc-sass) - 使用 node-sass 编译 sass 文件
 
 ### dependence
 
@@ -78,7 +79,6 @@ stc.start(); // 启动工作流程
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
-* [ ] sass 转译为 CSS
 * [ ] less 转译为 CSS
 * [ ] 文件含有 BOM 头检测
 * [ ] 空文件检测
