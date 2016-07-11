@@ -69,6 +69,17 @@ export const master = {
   updateAst: (config, stc) => {
     let file = stc.resource.getFileByPath(config.file);
     file.setAst(config.ast);
+  },
+  /**
+   * get file content
+   */
+  getContent: async(config, stc) => {
+    let file = stc.resource.getFileByPath(config.file);
+    let content = await file.getContent(config.encoding);
+    if(Buffer.isBuffer(content)){
+      return content.toString('base64');
+    }
+    return content;
   }
 };
 /**
