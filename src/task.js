@@ -51,9 +51,9 @@ export default class Task {
       return;
     }
     let pluginClass = PluginInvoke.getPluginClass(pluginOptions.plugin);
-    let {include, exclude} = this.getIncludeAndExclude(pluginOptions);
+    let ie = this.getIncludeAndExclude(pluginOptions);
     //no files matched
-    let files = this.stc.resource.getFiles(include, exclude);
+    let files = this.stc.resource.getFiles(ie.include, ie.exclude);
     if(!files.length){
       return;
     }
@@ -62,16 +62,21 @@ export default class Task {
     let consoleFiles = JSON.stringify(files.map(file => file.path));
     pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
 
+    
     let startTime = Date.now();
-    let ret = await PluginInvoke.runAll(pluginClass, files, {
+    let {options, include, cluster, cache} = pluginOptions;
+    let ret = await PluginInvoke.run(pluginClass, files, {
       stc: this.stc,
-      options: pluginOptions.options,
+      options,
+      include,
+      cluster,
+      cache,
       logger: pluginFileTime,
       ext
     });
-
     let endTime = Date.now();
     pluginTime(`${pluginName}: files=${files.length}, time=${endTime - startTime}ms`);
+
     return ret;
   }
   /**
@@ -144,7 +149,7 @@ export default class Task {
             err = JSON.parse(err.message.slice(err.message.indexOf('{')));
           }catch(e){}
         }
-        
+
         if(err.className){
           this.stc.log.display(err, 'error');
         }else{

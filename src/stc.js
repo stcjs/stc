@@ -30,7 +30,7 @@ export default class STC {
     this.config = config;
     this.resource = this.getResourceInstance();
     this.cluster = this.getClusterInstance();
-    this.cache = StcCache;
+    this.cache = StcCache; // cache class
     // store all cache instances
     this.cacheInstances = {};
     // flkit
@@ -116,9 +116,13 @@ export default class STC {
     }
     
     file = this.resource.createFile(file);
+    let {options, include, cluster, cache} = opts;
     let instance = new PluginInvoke(opts.plugin, file, {
       stc: this,
-      options: opts.options,
+      options,
+      include,
+      cluster,
+      cache,
       logger: pluginFileTime,
       ext: {
         type,
