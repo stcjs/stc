@@ -74,7 +74,6 @@ stc.start(); // 启动工作流程
 
 ## 需要开发的插件
 
-* [ ] [CSSLint](https://github.com/stcjs/stc-csslint.git)
 * [ ] LocalStorage
 * [ ] 国际化
 * [ ] CSS Sprite
