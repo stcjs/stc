@@ -48,6 +48,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-eslint](https://github.com/stcjs/stc-eslint) - 使用 ESLint 检查 JavaScript 代码规范
 * [x] [stc-empty-file](https://github.com/stcjs/stc-empty-file) - 空文件检测
 * [x] [stc-bomdetector](https://github.com/stcjs/stc-bomdetector) - 检测并移除文件 BOM 头
+* [x] [stc-csslint](https://github.com/stcjs/stc-csslint) - css校验
 
 ### transpile
 
