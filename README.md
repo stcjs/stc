@@ -47,6 +47,7 @@ stc.start(); // 启动工作流程
 
 * [x] [stc-eslint](https://github.com/stcjs/stc-eslint) - 使用 ESLint 检查 JavaScript 代码规范
 * [x] [stc-empty-file](https://github.com/stcjs/stc-empty-file) - 空文件检测
+* [x] [stc-bomdetector](https://github.com/stcjs/stc-bomdetector) - 检测并移除文件 BOM 头
 
 ### transpile
 
@@ -54,6 +55,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-babel](https://github.com/stcjs/stc-babel) - 使用 Babel 编译 ES2015+ 特性的文件
 * [x] [stc-sass](https://github.com/stcjs/stc-sass) - 使用 node-sass 编译 sass 文件
 * [x] [stc-less](https://github.com/stcjs/stc-less) - less 转译为 CSS
+* [x] [stc-css-autoprefixer](https://github.com/stcjs/stc-css-autoprefixer) - 使用 [Autoprefixer](https://github.com/postcss/autoprefixer) 来进行 CSS 语法的补全
 
 ### dependence
 
@@ -62,6 +64,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-uglify](https://github.com/stcjs/stc-uglify) - 使用 UglifyJS 压缩 JavaScript
 * [x] [stc-html-compress](https://github.com/stcjs/stc-html-compress) - 压缩模板文件，支持模板语法
 * [x] [stc-css-compress](https://github.com/stcjs/stc-css-compress) - 压缩 CSS 文件，支持模板语法
+* [x] [stc-css-combine](https://github.com/stcjs/stc-css-combine) - 合并@import url的css文件
 * [x] [stc-js-combine](https://github.com/stcjs/stc-js-combine) - 合并document.write的js文件
 * [x] [stc-cdn](https://github.com/stcjs/stc-cdn) - 将静态资源上传到 CDN
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
@@ -70,17 +73,14 @@ stc.start(); // 启动工作流程
 
 ## 正在开发的插件
 
-* [ ] [CSS 合并（@import url）](https://github.com/stcjs/stc-css-combine)
 * [ ] [CSSLint](https://github.com/stcjs/stc-csslint.git)
 * [ ] LocalStorage
 * [ ] 国际化
-* [ ] CSS 自动补前缀
 * [ ] CSS Sprite
 * [ ] JS 模块化合并
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
 * [ ] 编码规范检测
-* [ ] 文件含有 BOM 头检测
 * [ ] 文件拷贝
 * [ ] CDN 功能上传到阿里云、七牛、又拍云的适配器
 * [ ] Vue.js 代码转译
