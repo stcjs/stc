@@ -77,7 +77,8 @@ stc.start(); // 启动工作流程
 * [ ] LocalStorage
 * [ ] 国际化
 * [ ] CSS Sprite
-* [ ] JS 模块化合并
+* [ ] requirejs 代码合并
+* [ ] seajs 代码合并
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
 * [ ] HTML 编码规范检测
