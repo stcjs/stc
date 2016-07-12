@@ -46,7 +46,7 @@ stc.start(); // 启动工作流程
 ### lint
 
 * [x] [stc-eslint](https://github.com/stcjs/stc-eslint) - 使用 ESLint 检查 JavaScript 代码规范
-* [x] [ 空文件检测](https://github.com/stcjs/stc-empty-file) - 空文件检测
+* [x] [stc-empty-file](https://github.com/stcjs/stc-empty-file) - 空文件检测
 
 ### transpile
 
@@ -71,6 +71,7 @@ stc.start(); // 启动工作流程
 ## 正在开发的插件
 
 * [ ] [CSS 合并（@import url）](https://github.com/stcjs/stc-css-combine)
+* [ ] [CSSLint](https://github.com/stcjs/stc-csslint.git)
 * [ ] LocalStorage
 * [ ] 国际化
 * [ ] CSS 自动补前缀
