@@ -55,6 +55,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-babel](https://github.com/stcjs/stc-babel) - 使用 Babel 编译 ES2015+ 特性的文件
 * [x] [stc-sass](https://github.com/stcjs/stc-sass) - 使用 node-sass 编译 sass 文件
 * [x] [stc-less](https://github.com/stcjs/stc-less) - less 转译为 CSS
+* [x] [stc-css-autoprefixer](https://github.com/stcjs/stc-css-autoprefixer) - 使用 [Autoprefixer](https://github.com/postcss/autoprefixer) 来进行 CSS 语法的补全
 
 ### dependence
 
@@ -75,7 +76,6 @@ stc.start(); // 启动工作流程
 * [ ] [CSSLint](https://github.com/stcjs/stc-csslint.git)
 * [ ] LocalStorage
 * [ ] 国际化
-* [ ] CSS 自动补前缀
 * [ ] CSS Sprite
 * [ ] JS 模块化合并
 * [ ] 静态资源版本号
