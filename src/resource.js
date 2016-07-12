@@ -148,11 +148,15 @@ export default class Resource {
     if(!isArray(pattern)){
       pattern = [pattern];
     }
-    let filePath = file.path || file;
-    return pattern.some(item => {
+    let filepath = file.path || file;
+    let matches = null;
+    let flag = pattern.some(item => {
       // /\w/
       if(isRegExp(item)){
-        return item.test(filePath);
+        matches = filepath.match(item);
+        if(matches){
+          return true;
+        }
       }
       if(isObject(item)){
         // {type: 'tpl'}
@@ -164,8 +168,12 @@ export default class Resource {
         }
       }
       //@TODO support glob pattern?
-      return item === filePath;
+      return item === filepath;
     });
+    if(flag && !matches){
+      matches = [filepath];
+    }
+    return matches;
   }
   /**
    * get files
@@ -175,7 +183,7 @@ export default class Resource {
       if(item.prop('virtual')){
         return false;
       }
-      if(this.match(item, include) && !this.match(item, exclude)){
+      if(!!this.match(item, include) && !this.match(item, exclude)){
         return true;
       }
     });

@@ -114,13 +114,14 @@ export default class STC {
     if(!opts){
       throw new Error(`plugin not found, type: ${type}, pluginIndex: ${pluginIndex}`);
     }
-    
+
+    let ie = this.getIncludeAndExclude(opts);
     file = this.resource.createFile(file);
-    let {options, include, cluster, cache} = opts;
+    let {options, cluster, cache} = opts;
     let instance = new PluginInvoke(opts.plugin, file, {
       stc: this,
       options,
-      include,
+      include: ie.include,
       cluster,
       cache,
       logger: pluginFileTime,
@@ -130,5 +131,25 @@ export default class STC {
       }
     });
     return instance.run();
+  }
+  /**
+   * get include and exclude
+   */
+  getIncludeAndExclude(pluginOptions){
+    let {include, exclude} = pluginOptions;
+    let pluginClass = PluginInvoke.getPluginClass(pluginOptions.plugin);
+    if(!include){
+      include = pluginClass.include;
+      if(typeof include === 'function'){
+        include = include();
+      }
+    }
+    if(!exclude){
+      exclude = pluginClass.exclude;
+      if(typeof exclude === 'function'){
+        exclude = exclude();
+      }
+    }
+    return {include, exclude};
   }
 }

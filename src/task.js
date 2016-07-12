@@ -23,26 +23,6 @@ export default class Task {
     this.stc = new STC(config);
   }
   /**
-   * get include and exclude
-   */
-  getIncludeAndExclude(pluginOptions){
-    let {include, exclude} = pluginOptions;
-    let pluginClass = PluginInvoke.getPluginClass(pluginOptions.plugin);
-    if(!include){
-      include = pluginClass.include;
-      if(typeof include === 'function'){
-        include = include();
-      }
-    }
-    if(!exclude){
-      exclude = pluginClass.exclude;
-      if(typeof exclude === 'function'){
-        exclude = exclude();
-      }
-    }
-    return {include, exclude};
-  }
-  /**
    * run plugin task
    */
   async runPlugin(pluginOptions, ext){
@@ -51,7 +31,7 @@ export default class Task {
       return;
     }
     let pluginClass = PluginInvoke.getPluginClass(pluginOptions.plugin);
-    let ie = this.getIncludeAndExclude(pluginOptions);
+    let ie = this.stc.getIncludeAndExclude(pluginOptions);
     //no files matched
     let files = this.stc.resource.getFiles(ie.include, ie.exclude);
     if(!files.length){
@@ -64,11 +44,11 @@ export default class Task {
 
     
     let startTime = Date.now();
-    let {options, include, cluster, cache} = pluginOptions;
+    let {options, cluster, cache} = pluginOptions;
     let ret = await PluginInvoke.run(pluginClass, files, {
       stc: this.stc,
       options,
-      include,
+      include: ie.include,
       cluster,
       cache,
       logger: pluginFileTime,
