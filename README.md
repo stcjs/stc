@@ -49,6 +49,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-empty-file](https://github.com/stcjs/stc-empty-file) - 空文件检测
 * [x] [stc-bomdetector](https://github.com/stcjs/stc-bomdetector) - 检测并移除文件 BOM 头
 * [x] [stc-csslint](https://github.com/stcjs/stc-csslint) - css校验
+* [x] [stc-htmllint](https://github.com/stcjs/stc-htmllint) - 使用 htmllint 检查 HTML 代码规范
 
 ### transpile
 
@@ -81,7 +82,6 @@ stc.start(); // 启动工作流程
 * [ ] seajs 代码合并
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
-* [ ] HTML 编码规范检测
 * [ ] 文件拷贝
 * [ ] 文件移动
 * [ ] CDN 功能上传到阿里云、七牛、又拍云的适配器
