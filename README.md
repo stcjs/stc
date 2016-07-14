@@ -84,7 +84,7 @@ stc.start(); // 启动工作流程
 * [ ] 模板 XSS 自动修复功能
 * [ ] 文件拷贝
 * [ ] 文件移动
-* [ ] CDN 功能上传到阿里云、七牛、又拍云的适配器
+* [ ] CDN 功能上传到阿里云、[七牛](https://github.com/stcjs/stc-cdn-qiniu)、又拍云的适配器
 * [ ] Vue.js 代码转译
 * [ ] Weex 代码转译
 * [ ] 类似 webpack 将项目打包在一起的插件
