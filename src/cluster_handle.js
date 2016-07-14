@@ -1,5 +1,7 @@
 'use strict';
 
+import StcPlugin from 'stc-plugin';
+
 /**
  * special handle in cluster
  */
@@ -80,6 +82,18 @@ export const master = {
       return content.toString('base64');
     }
     return content;
+  },
+  /**
+   * exec plugin update method
+   */
+  update: async(config, stc) => {
+    let file = stc.resource.getFileByPath(config.file);
+    let instance = new PluginInvoke(StcPlugin, file, {
+      stc,
+      options: {}
+    });
+    instance.prop('__isRun__', true);
+    return instance.update(data);
   }
 };
 /**
