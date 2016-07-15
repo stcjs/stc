@@ -75,8 +75,8 @@ stc.start(); // 启动工作流程
 
 ## 需要开发的插件
 
-* [ ] LocalStorage
-* [ ] 国际化
+* [ ] [LocalStorage](https://github.com/stcjs/stc-localstorage)
+* [ ] [国际化](https://github.com/stcjs/stc-i18n)
 * [ ] CSS Sprite
 * [ ] requirejs 代码合并
 * [ ] seajs 代码合并
