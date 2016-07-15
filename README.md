@@ -88,6 +88,9 @@ stc.start(); // 启动工作流程
 * [ ] Vue.js 代码转译
 * [ ] Weex 代码转译
 * [ ] 类似 webpack 将项目打包在一起的插件
+* [ ] [fontello](https://github.com/fontello/fontello)  
+* [ ] jade 预编译
+* [ ] nunjucks 预编译
 
 ## 如何开发
 
