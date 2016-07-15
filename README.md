@@ -78,7 +78,7 @@ stc.start(); // 启动工作流程
 * [ ] [LocalStorage](https://github.com/stcjs/stc-localstorage)
 * [ ] [国际化](https://github.com/stcjs/stc-i18n)
 * [ ] CSS Sprite
-* [ ] requirejs 代码合并
+* [ ] [requirejs 代码合并](https://github.com/stcjs/stc-requirejs-bundle)
 * [ ] seajs 代码合并
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
