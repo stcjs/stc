@@ -76,6 +76,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-replace](https://github.com/stcjs/stc-replace) - 代码替换功能
 * [x] [stc-imagemin](https://github.com/stcjs/stc-imagemin) - 优化 JPG, PNG 和 GIF 等图片
 * [x] [stc-inline](https://github.com/stcjs/stc-inline) - 外联资源转为内联资源，小图片转为 base64，js inline 功能
+* [x] [stc-move-file](https://github.com/stcjs/stc-move-file) - 文件移动
 
 ## 需要开发的插件
 
@@ -87,7 +88,6 @@ stc.start(); // 启动工作流程
 * [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
 * [ ] 文件拷贝
-* [ ] 文件移动
 * [ ] CDN 功能上传到阿里云、[七牛](https://github.com/stcjs/stc-cdn-qiniu)、又拍云的适配器
 * [ ] Vue.js 代码转译
 * [ ] Weex 代码转译
