@@ -29,6 +29,10 @@ var stc = require('stc');
 var uglify = require('stc-uglify');
 var eslint = require('stc-eslint');
 
+stc.config({
+  include: ['template/', 'static/']
+})
+
 stc.lint({
     eslint: {plugin: eslint, include: /\.js$/, options: {}}
 });
