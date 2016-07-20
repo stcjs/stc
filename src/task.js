@@ -133,7 +133,7 @@ export default class Task {
         if(err.className){
           this.stc.log.display(err, 'error');
         }else{
-          console.error(err);
+          console.error(err && err.stack || err);
         }
         process.exit(100);
         return;
