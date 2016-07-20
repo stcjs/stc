@@ -138,7 +138,7 @@ export default class Task {
         process.exit(100);
         return;
       }
-      //this.cluster.stop();
+      this.cluster.stop();
       let endTime = Date.now();
       console.log('Build finish, Total time: ' + (endTime - startTime) + 'ms');
       process.exit(0);
