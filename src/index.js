@@ -98,6 +98,9 @@ const Application = class Application {
    * set preset config
    */
   preset(preset, options = {}){
+    if(preset.default && preset.__esModule) {
+      preset = preset.default;
+    }
     options.transpile = this.transConf(options.transpile);
     options.dependence = this.transConf(options.dependence);
     options.workflow = this.transConf(options.workflow);
