@@ -112,7 +112,15 @@ const Application = class Application {
    * start workflow
    */
   start(){
-    let instance = new Task(this.config());
+    let config = this.config();
+    if(!Array.isArray(config.tpl.ld)){
+      config.tpl.ld = [config.tpl.ld];
+    }
+    if(!Array.isArray(config.tpl.rd)){
+      config.tpl.rd = [config.tpl.rd];
+    }
+    
+    let instance = new Task(config);
     instance.run();
   }
 };
