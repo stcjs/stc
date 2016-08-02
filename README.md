@@ -77,6 +77,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-imagemin](https://github.com/stcjs/stc-imagemin) - 优化 JPG, PNG 和 GIF 等图片
 * [x] [stc-inline](https://github.com/stcjs/stc-inline) - 外联资源转为内联资源，小图片转为 base64，js inline 功能
 * [x] [stc-move-file](https://github.com/stcjs/stc-move-file) - 文件移动
+* [x] [stc-resource-version](https://github.com/stcjs/stc-resource-version) - 静态资源版本号
 
 ## 需要开发的插件
 
@@ -85,7 +86,6 @@ stc.start(); // 启动工作流程
 * [ ] CSS Sprite
 * [ ] [requirejs 代码合并](https://github.com/stcjs/stc-requirejs-bundle)
 * [ ] seajs 代码合并
-* [ ] 静态资源版本号
 * [ ] 模板 XSS 自动修复功能
 * [ ] 文件拷贝
 * [ ] CDN 功能上传到阿里云、[七牛](https://github.com/stcjs/stc-cdn-qiniu)、又拍云的适配器
