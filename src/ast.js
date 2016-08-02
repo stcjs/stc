@@ -140,8 +140,8 @@ const stringifyJS = (ast, fileInstance) => {
 /**
  * stringify css
  */
-const stringifyCSS = (ast, fileInstance) => {
-  return cssToken2Text(ast);
+const stringifyCSS = (ast, fileInstance, delimiters) => {
+  return cssToken2Text(ast, delimiters);
 }
 
 /**
@@ -158,7 +158,10 @@ export function stringify(ast, fileInstance, config){
   if(fileInstance.prop('tpl')){
     return htmlToken2Text(ast, {
       js: stringifyJS,
-      css: stringifyCSS
+      css: ast => {
+        let delimiters = [].concat(config.tpl.ld).concat(config.tpl.rd);
+        return stringifyCSS(ast, fileInstance, delimiters);
+      }
     });
   }
   throw new Error(`can not convert file ${fileInstance.path} AST to string`);
