@@ -93,8 +93,8 @@ export const master = {
       stc,
       options: {}
     });
-    instance.prop('__isRun__', true);
-    return instance.update(data);
+    instance.pluginInstance.prop('__isRun__', true);
+    return instance.pluginInstance.update(config.data);
   }
 };
 /**
