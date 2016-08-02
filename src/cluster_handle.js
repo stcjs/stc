@@ -1,6 +1,7 @@
 'use strict';
 
 import StcPlugin from 'stc-plugin';
+import PluginInvoke from 'stc-plugin-invoke';
 
 /**
  * special handle in cluster
