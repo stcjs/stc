@@ -5,6 +5,7 @@ import PluginInvoke from 'stc-plugin-invoke';
 import StcCache from 'stc-cache';
 import StcLog from 'stc-log';
 import {isMaster} from 'cluster';
+import {extend} from 'stc-helper';
 
 import {parse, stringify} from './ast.js';
 import Resource from './resource.js';
@@ -47,6 +48,7 @@ export default class STC {
       options.tpl = options.engine;
     }
     let cls = this.flkit[type];
+    options = extend({}, this.config.tpl, options);
     let instance = new cls(text, options);
     if(options.adapter){
       instance.registerTpl(options.adapter);

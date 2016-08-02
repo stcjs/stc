@@ -66,7 +66,7 @@ const parseHtml = (content, config, options) => {
     // style
     if(token.type === TokenType.HTML_TAG_STYLE){
       let contentToken = token.ext.content;
-      let cssTokens = parseCss(contentToken.value, config, {
+      let cssTokens = parseCss(contentToken.value, config.tpl, {
         line: contentToken.loc.start.line,
         col: contentToken.loc.start.col
       });
