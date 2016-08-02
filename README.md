@@ -78,10 +78,11 @@ stc.start(); // 启动工作流程
 * [x] [stc-inline](https://github.com/stcjs/stc-inline) - 外联资源转为内联资源，小图片转为 base64，js inline 功能
 * [x] [stc-move-file](https://github.com/stcjs/stc-move-file) - 文件移动
 * [x] [stc-resource-version](https://github.com/stcjs/stc-resource-version) - 静态资源版本号
+* [ ] [LocalStorage](https://github.com/stcjs/stc-localstorage) - 将 JS/CSS 资源编译到 localStorage 中
 
 ## 需要开发的插件
 
-* [ ] [LocalStorage](https://github.com/stcjs/stc-localstorage)
+
 * [ ] [国际化](https://github.com/stcjs/stc-i18n)
 * [ ] CSS Sprite
 * [ ] [requirejs 代码合并](https://github.com/stcjs/stc-requirejs-bundle)
