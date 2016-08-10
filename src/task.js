@@ -4,12 +4,12 @@ import PluginInvoke from 'stc-plugin-invoke';
 import debug from 'debug';
 import fs from 'fs';
 import {mkdir, promisify} from 'stc-helper';
+import StcLog from 'stc-log';
 
 import STC from './stc.js';
 
-const pluginFilesLog = debug('pluginMatchedFiles');
 const pluginFileTime = debug('pluginFileTime');
-const pluginTime = debug('pluginTotalTime');
+const logInstance = new StcLog();
 
 /**
  * Task class
@@ -40,8 +40,10 @@ export default class Task {
     
     let pluginName = pluginClass.name;
     let consoleFiles = JSON.stringify(files.map(file => file.path));
-    pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
-
+    //pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
+    logInstance.display(colors => {
+      return `${colors.green(pluginName)}: matchedFiles=${files.length}, files=${consoleFiles}`;
+    });
     
     let startTime = Date.now();
     let {options, cluster, cache} = pluginOptions;
@@ -55,7 +57,10 @@ export default class Task {
       ext
     });
     let endTime = Date.now();
-    pluginTime(`${pluginName}: files=${files.length}, time=${endTime - startTime}ms`);
+    let aveTime = ((endTime - startTime) / files.length).toFixed(0);
+    logInstance.display(colors => {
+      return `${colors.green(pluginName)}: totalTime=${endTime - startTime}ms, averageTime: ${aveTime}ms`;
+    });
 
     return ret;
   }
@@ -140,7 +145,7 @@ export default class Task {
       }
       this.stc.cluster.stop();
       let endTime = Date.now();
-      console.log('Build finish, Total time: ' + (endTime - startTime) + 'ms');
+      console.log('Build finish, totalTime: ' + (endTime - startTime) + 'ms');
       process.exit(0);
     }
   }

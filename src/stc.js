@@ -4,7 +4,7 @@ import StcPlugin from 'stc-plugin';
 import PluginInvoke from 'stc-plugin-invoke';
 import StcCache from 'stc-cache';
 import StcLog from 'stc-log';
-import {isMaster} from 'cluster';
+//import {isMaster} from 'cluster';
 import {extend} from 'stc-helper';
 
 import {parse, stringify} from './ast.js';

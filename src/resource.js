@@ -93,7 +93,7 @@ const getFileByPathHandle = (instance, linkpath) => {
       return file;
     }
   }
-}
+};
 /**
  * search File
  */
@@ -114,7 +114,7 @@ const searchFile = (instance, linkpath) => {
     lookFileCache[linkpath] = file;
     return file;
   }
-}
+};
 
 /**
  * look file
@@ -124,7 +124,7 @@ const lookFile = (instance, linkpath) => {
     return getFileByPathHandle(instance, linkpath);
   }
   return searchFile(instance, linkpath);
-}
+};
 
 /**
  * resource manage

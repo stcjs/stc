@@ -6,25 +6,12 @@ import {
   cssToken2Text
 } from 'flkit';
 
-import {isArray, extend} from 'stc-helper';
+import {extend} from 'stc-helper';
 
 //babylon can not use import
 let babylon = null;
 let babelGenerator = null;
 
-/**
- * get attr value in attrs
- */
-const getAttrValue = (attrs, name) => {
-  let value;
-  attrs.some(item => {
-    if(item.nameLowerCase === name){
-      value = item.value;
-      return true;
-    }
-  });
-  return value;
-};
 
 /**
  * parse content
@@ -135,14 +122,14 @@ const stringifyJS = (ast, fileInstance) => {
     filename: fileInstance && fileInstance.path || ''
   });
   return data.code;
-}
+};
 
 /**
  * stringify css
  */
 const stringifyCSS = (ast, fileInstance, delimiters) => {
   return cssToken2Text(ast, delimiters);
-}
+};
 
 /**
  * convert ast to content

@@ -1,5 +1,5 @@
 import {extend} from 'stc-helper';
-import stcDepParser from 'stc-dep-parser';
+//import stcDepParser from 'stc-dep-parser';
 /**
  * config class
  */

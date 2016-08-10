@@ -15,7 +15,8 @@
     "prepublish": "npm run compile",
     "eslint": "eslint src/"
   },
-  "contributors": [{
+  "contributors": [
+    {
       "name": "welefen",
       "email": "welefen@gmail.com"
     }

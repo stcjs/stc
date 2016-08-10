@@ -22,6 +22,8 @@
     "yoda": 0,
     "no-cond-assign": 0,
     "no-new-func": 0,
-    "no-labels": 0
+    "no-labels": 0,
+    "no-ex-assign": 0,
+    "no-return-assign": 0
   }
 }
