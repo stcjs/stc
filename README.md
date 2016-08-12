@@ -77,6 +77,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-imagemin](https://github.com/stcjs/stc-imagemin) - 优化 JPG, PNG 和 GIF 等图片
 * [x] [stc-inline](https://github.com/stcjs/stc-inline) - 外联资源转为内联资源，小图片转为 base64，js inline 功能
 * [x] [stc-move-file](https://github.com/stcjs/stc-move-file) - 文件移动
+* [x] [stc-copy-file](https://github.com/stcjs/stc-copy-file) - 文件拷贝
 * [x] [stc-resource-version](https://github.com/stcjs/stc-resource-version) - 静态资源版本号
 * [ ] [LocalStorage](https://github.com/stcjs/stc-localstorage) - 将 JS/CSS 资源编译到 localStorage 中
 
@@ -88,7 +89,6 @@ stc.start(); // 启动工作流程
 * [ ] [requirejs 代码合并](https://github.com/stcjs/stc-requirejs-bundle)
 * [ ] seajs 代码合并
 * [ ] 模板 XSS 自动修复功能
-* [ ] 文件拷贝
 * [ ] CDN 功能上传到阿里云、[七牛](https://github.com/stcjs/stc-cdn-qiniu)、又拍云的适配器
 * [ ] Vue.js 代码转译
 * [ ] Weex 代码转译
