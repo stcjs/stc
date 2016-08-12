@@ -39,11 +39,6 @@ export default class Task {
     }
     
     let pluginName = pluginClass.name;
-    let consoleFiles = JSON.stringify(files.map(file => file.path));
-    //pluginFilesLog(`${pluginName}: length=${files.length}, files=${consoleFiles}`);
-    logInstance.display(colors => {
-      return `${colors.green(pluginName)}: matchedFiles=${files.length}, files=${consoleFiles}`;
-    });
     
     let startTime = Date.now();
     let {options, cluster, cache} = pluginOptions;
@@ -59,7 +54,7 @@ export default class Task {
     let endTime = Date.now();
     let aveTime = ((endTime - startTime) / files.length).toFixed(0);
     logInstance.display(colors => {
-      return `${colors.green(pluginName)}: totalTime=${endTime - startTime}ms, averageTime: ${aveTime}ms`;
+      return `${colors.green(pluginName)}: matchedFiles=${files.length}, totalTime=${endTime - startTime}ms, averageTime: ${aveTime}ms`;
     });
 
     return ret;
