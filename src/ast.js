@@ -66,7 +66,11 @@ const parseHtml = (content, config, options) => {
       let startToken = token.ext.start;
       if(startToken.ext.isTpl){
         let contentToken = token.ext.content;
-        let htmlTokens = parseHtml(contentToken.value, {tpl: config.jsTpl}, {
+        const {ld, rd} = config.tpl;
+        let conf = extend({}, config.jsTpl);
+        conf.ld = ld.concat(conf.ld);
+        conf.rd = rd.concat(conf.rd);
+        let htmlTokens = parseHtml(contentToken.value, {tpl: conf}, {
           line: contentToken.loc.start.line,
           col: contentToken.loc.start.col
         });

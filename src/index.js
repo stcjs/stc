@@ -113,11 +113,12 @@ const Application = class Application {
    */
   start(){
     let config = this.config();
-    if(!Array.isArray(config.tpl.ld)){
-      config.tpl.ld = [config.tpl.ld];
+    const {ld, rd} = config.tpl;
+    if(!Array.isArray(ld)){
+      config.tpl.ld = [ld];
     }
-    if(!Array.isArray(config.tpl.rd)){
-      config.tpl.rd = [config.tpl.rd];
+    if(!Array.isArray(rd)){
+      config.tpl.rd = [rd];
     }
     
     let instance = new Task(config);
