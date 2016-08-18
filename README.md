@@ -79,7 +79,7 @@ stc.start(); // 启动工作流程
 * [x] [stc-move-file](https://github.com/stcjs/stc-move-file) - 文件移动
 * [x] [stc-copy-file](https://github.com/stcjs/stc-copy-file) - 文件拷贝
 * [x] [stc-resource-version](https://github.com/stcjs/stc-resource-version) - 静态资源版本号
-* [x] [requirejs 代码合并](https://github.com/stcjs/stc-requirejs-bundle) - 将使用 requirejs 的模块进行打包
+* [x] [stc-requirejs-bundle](https://github.com/stcjs/stc-requirejs-bundle) - 将使用 requirejs 的模块进行打包
 * [ ] [stc-localstorage](https://github.com/stcjs/stc-localstorage) - 将 JS/CSS 资源编译到 localStorage 中
 
 ## 需要开发的插件
