@@ -38,7 +38,7 @@ export default class Task {
       return;
     }
     
-    let pluginName = pluginClass.name;
+    let pluginName = pluginOptions.name || pluginClass.name;
     
     let startTime = Date.now();
     let {options, cluster, cache} = pluginOptions;
