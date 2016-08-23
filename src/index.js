@@ -113,6 +113,13 @@ const Application = class Application {
    */
   start(){
     let config = this.config();
+    // verify config.product
+    if(!config.product || !/^[\w\.]+$/.test(config.product)){
+      console.error('config.product must be set, pattern is /^[\w\.]+$/');
+      process.exit(100);
+      return;
+    }
+
     const {ld, rd} = config.tpl;
     if(!Array.isArray(ld)){
       config.tpl.ld = [ld];

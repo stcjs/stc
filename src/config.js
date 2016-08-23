@@ -12,7 +12,7 @@ export default class {
      * default config
      */
     this._config = {
-      product: 'default',
+      //product: 'default',
       workers: 0,
       cluster: true,
       cache: true,
