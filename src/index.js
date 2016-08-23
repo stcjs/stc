@@ -120,6 +120,8 @@ const Application = class Application {
     if(!Array.isArray(rd)){
       config.tpl.rd = [rd];
     }
+    // for calculate cache key
+    config._tplCacheKey = JSON.stringify(config.tpl) + JSON.stringify(config.jsTpl);
     
     let instance = new Task(config);
     instance.run();
