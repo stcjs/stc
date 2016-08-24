@@ -127,6 +127,10 @@ const Application = class Application {
     if(!Array.isArray(rd)){
       config.tpl.rd = [rd];
     }
+    // make config.include be array
+    if(!Array.isArray(config.include)){
+      config.include = [config.include];
+    }
     // for calculate cache key
     config._tplCacheKey = JSON.stringify(config.tpl) + JSON.stringify(config.jsTpl);
     
