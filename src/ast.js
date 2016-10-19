@@ -101,7 +101,7 @@ export function parse(content, fileInstance, config){
       if(!babylon){
         babylon = require('babylon');
       }
-      return babylon.parse(content).program;
+      return babylon.parse(content);
     case 'css':
       return parseCss(content, config);
   }
