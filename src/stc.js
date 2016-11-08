@@ -88,14 +88,22 @@ export default class STC {
    * invoked in master
    */
   masterHandle(config){
-    let {method, args, options, file} = config;
+    let {method, type, pluginIndex, args, options, file} = config;
 
-    if(masterHandles[method]){
+    let plugin = StcPlugin;
+    // invoke plugin method if type & pluginIndex are specified
+    if(type) {
+      options = this.config[type][pluginIndex];
+      if(!options){
+        throw new Error(`plugin not found, type: ${type}, pluginIndex: ${pluginIndex}`);
+      }
+      plugin = options.plugin;
+    } else if(masterHandles[method]){
       return masterHandles[method](config, this);
     }
 
     file = this.resource.getFileByPath(file);
-    let instance = new PluginInvoke(StcPlugin, file, {
+    let instance = new PluginInvoke(plugin, file, {
       stc: this,
       options: options
     });
@@ -106,11 +114,11 @@ export default class STC {
    */
   workerHandle(config){
     let {type, pluginIndex, file} = config;
-    
+
     if(workerHandles[type]){
       return workerHandles[type](config, this);
     }
-    
+
     //invoke plugin
     let opts = this.config[type][pluginIndex];
     if(!opts){
