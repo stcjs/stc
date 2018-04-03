@@ -246,6 +246,7 @@ export default class Resource {
     if(!isString(filepath) && filepath.path){
       return filepath;
     }
+    filepath = path.join('', filepath);
     if(filepath[0] === '/'){
       filepath = filepath.slice(1);
     }
