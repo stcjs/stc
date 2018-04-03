@@ -29,7 +29,7 @@ const Application = class Application {
   constructor(){
     this._env = '';
     this._config = null;
-    
+
     this.env('default');
   }
   /**
@@ -104,7 +104,7 @@ const Application = class Application {
     options.transpile = this.transConf(options.transpile);
     options.dependence = this.transConf(options.dependence);
     options.workflow = this.transConf(options.workflow);
-    
+
     preset = extend(preset, options);
     return this.config(preset);
   }
